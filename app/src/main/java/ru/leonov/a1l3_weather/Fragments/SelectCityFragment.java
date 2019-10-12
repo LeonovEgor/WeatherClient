@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.Objects;
 
 import ru.leonov.a1l3_weather.R;
@@ -98,9 +100,31 @@ public class SelectCityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "onItemClick");
                 currentPosition = position;
-                showWeatherDetail();
+                showSnackbar(listView);
+
             }
         });
+    }
+
+    // Задание: 3. Добавьте snackBar для подтверждения действий пользователя.
+    private void showSnackbar(View view) {
+        String city;
+        try {
+            String[] cities = getResources().getStringArray(R.array.cities);
+            city = cities[currentPosition];
+        }
+        catch (Exception e) {
+            Log.d(TAG, "Ошибка получения города из списка: " + e.getMessage());
+            return;
+        }
+
+        Snackbar.make(view, city, Snackbar.LENGTH_LONG)
+                .setAction("Подтвердите", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showWeatherDetail();
+                    }
+                }).show();
     }
 
     private void showWeatherDetail() {
