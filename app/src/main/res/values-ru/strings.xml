@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">A1L6_Погода</string>
+
+    <string name="cityStr">Город</string>
+
+    <string name="humidity">Влажность</string>
+    <string name="humidityDimension">%</string>
+
+    <string name="pressure">Давление</string>
+    <string name="pressureDimension">мм рт.ст.</string>
+
+    <string name="windSpeed">Скорость ветра</string>
+    <string name="windSpeedDimension">м/с</string>
+
+    <string name="temperature">Температура</string>
+
+    <string name="celsiusDimension">C</string>
+
+    <string name="empty_list">Список пуст</string>
+
+</resources>

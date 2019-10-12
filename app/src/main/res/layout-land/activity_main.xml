@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- это макет для альбомной ориентации -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:background="@drawable/background">
+
+    <!-- Фрагмент с выбором города и параметрами -->
+    <fragment
+        android:name="ru.leonov.a1l3_weather.Fragments.SelectCityFragment"
+        android:id="@+id/selectCities"
+        android:layout_weight="1"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_select_city" />
+
+    <!-- Здесь будет погода выбранного города -->
+    <FrameLayout
+        android:id="@+id/weatherDetailContainer"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        tools:ignore="InconsistentLayout" />
+
+</LinearLayout>

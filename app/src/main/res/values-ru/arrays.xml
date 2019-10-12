@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="cities">
+        <item>Москва</item>
+        <item>Самара</item>
+        <item>Вологда</item>
+        <item>Волгоград</item>
+        <item>Саратов</item>
+        <item>Воронеж</item>
+    </string-array>
+
+    <string-array name="dayOfWeek">
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+        <item>Воскресенье</item>
+    </string-array>
+
+
+</resources>

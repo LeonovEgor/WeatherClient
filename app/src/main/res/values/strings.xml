@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">A1L6_Weather</string>
+
+    <string name="cityStr">City</string>
+
+    <string name="humidity">Humidity</string>
+    <string name="humidityDimension">%</string>
+
+    <string name="pressure">Pressure</string>
+    <string name="pressureDimension">мм рт.ст.</string>
+
+    <string name="windSpeed">Wind speed</string>
+    <string name="windSpeedDimension">m/s</string>
+
+    <string name="temperature">Temperature</string>
+
+    <string name="celsiusDimension">C</string>
+
+    <string name="empty_list">List is empty</string>
+
+</resources>
