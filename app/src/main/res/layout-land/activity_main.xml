@@ -5,8 +5,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:baselineAligned="false"
-    android:background="@drawable/background">
+    android:baselineAligned="false">
 
     <!-- Фрагмент с выбором города и параметрами -->
     <fragment
