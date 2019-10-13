@@ -1,27 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- это макет для альбомной ориентации -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:baselineAligned="false">
+    android:orientation="vertical">
 
-    <!-- Фрагмент с выбором города и параметрами -->
-    <fragment
-        android:name="ru.leonov.a1l3_weather.Fragments.SelectCityFragment"
-        android:id="@+id/selectCities"
-        android:layout_weight="1"
-        android:layout_width="0px"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_select_city" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <!-- Здесь будет погода выбранного города -->
-    <FrameLayout
-        android:id="@+id/weatherDetailContainer"
-        android:layout_width="0px"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        tools:ignore="InconsistentLayout" />
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <!-- Фрагмент с выбором города и параметрами -->
+        <fragment
+            android:name="ru.leonov.a1l3_weather.Fragments.SelectCityFragment"
+            android:id="@+id/selectCities"
+            android:layout_weight="1"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_select_city" />
+
+        <!-- Здесь будет погода выбранного города -->
+        <FrameLayout
+            android:id="@+id/weatherDetailContainer"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:ignore="InconsistentLayout" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -18,4 +18,15 @@
 
     <string name="empty_list">List is empty</string>
 
+    <string name="action_settings">Settings</string>
+    <string name="confirm">Confirm</string>
+    <string name="about">About</string>
+    <string name="geekbrains_university">GeekBrains university</string>
+    <string name="android_start_course">Android Start course</string>
+    <string name="student">Student: Leonov EA</string>
+    <string name="close">Close</string>
+    <string name="fahrenheitDimension">F</string>
+    <string name="ok">Save</string>
+    <string name="cancel">Cancel</string>
+
 </resources>

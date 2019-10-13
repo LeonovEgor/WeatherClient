@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    style="@style/ViewStyle">
+
+    <CheckBox
+        android:id="@+id/cbPressure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pressure"
+        style="@style/ViewStyle"/>
+
+    <CheckBox
+        android:id="@+id/cbHumidity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/humidity"
+        style="@style/ViewStyle"/>
+
+    <CheckBox
+        android:id="@+id/cbWindSpeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/windSpeed"
+        style="@style/ViewStyle"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@id/rbCelsius">
+
+        <RadioButton
+            android:id="@+id/rbCelsius"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/celsiusDimension"
+            style="@style/ViewStyle"/>
+
+        <RadioButton
+            android:id="@+id/rbFahrenheit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/fahrenheitDimension"
+            style="@style/ViewStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            style="?android:attr/buttonBarButtonStyle">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:insetLeft="8dp"
+                android:insetRight="8dp"
+                android:text="@string/ok" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:insetLeft="8dp"
+                android:insetRight="8dp"
+                android:text="@string/cancel"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+        </LinearLayout>
+    </RadioGroup>
+
+</LinearLayout>

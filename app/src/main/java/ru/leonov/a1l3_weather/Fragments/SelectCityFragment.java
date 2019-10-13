@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -42,7 +43,6 @@ public class SelectCityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, this.getClass().getName() + " - onCreateView");
-
         return inflater.inflate(R.layout.fragment_select_city, container, false);
     }
 
@@ -119,7 +119,7 @@ public class SelectCityFragment extends Fragment {
         }
 
         Snackbar.make(view, city, Snackbar.LENGTH_LONG)
-                .setAction("Подтвердите", new View.OnClickListener() {
+                .setAction(getString(R.string.confirm), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         showWeatherDetail();

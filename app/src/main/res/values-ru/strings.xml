@@ -19,4 +19,14 @@
 
     <string name="empty_list">Список пуст</string>
 
+    <string name="action_settings">Установки</string>
+    <string name="confirm">Подтвердите</string>
+    <string name="about">О программе</string>
+    <string name="geekbrains_university">Университет GeekBrains</string>
+    <string name="android_start_course">Android Start cource</string>
+    <string name="student">Студент: Леонов ЕА</string>
+    <string name="close">Закрыть</string>
+    <string name="fahrenheitDimension">F</string>
+    <string name="ok">Сохранить</string>
+    <string name="cancel">Отмена</string>
 </resources>
