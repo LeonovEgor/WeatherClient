@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">A1L7_Weather</string>
+    <string name="app_name">A1L8_Weather</string>
 
     <string name="cityStr">City</string>
 
@@ -28,5 +28,15 @@
     <string name="fahrenheitDimension">F</string>
     <string name="ok">Save</string>
     <string name="cancel">Cancel</string>
+
+    <string name="place_not_found">Place not found</string>
+    <string name="weather_sunny">&#xf00d;</string>
+    <string name="weather_clear_night">&#xf02e;</string>
+    <string name="weather_foggy">&#xf014;</string>
+    <string name="weather_cloudy">&#xf013;</string>
+    <string name="weather_rainy">&#xf019;</string>
+    <string name="weather_snowy">&#xf01b;</string>
+    <string name="weather_thunder">&#xf01e;</string>
+    <string name="weather_drizzle">&#xf01c;</string>
 
 </resources>
