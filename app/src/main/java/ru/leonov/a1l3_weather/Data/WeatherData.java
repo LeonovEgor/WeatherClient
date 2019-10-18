@@ -6,14 +6,17 @@ public class WeatherData {
     public String humidity;
     public String windSpeed;
     public String temperature;
-    public String dayOfWeek;
+    public String weatherIcon;
+    public String updateDate;
 
-    public WeatherData(String city, String pressure, String humidity, String windSpeed, String temperature, String dayOfWeek) {
+    WeatherData(String city, String pressure, String humidity, String windSpeed, String temperature,
+                String weatherIcon, String updateDate) {
         this.city = city;
         this.pressure = pressure;
         this.humidity = humidity;
         this.windSpeed = windSpeed;
         this.temperature = temperature;
-        this.dayOfWeek = dayOfWeek;
+        this.weatherIcon = weatherIcon;
+        this.updateDate = updateDate;
     }
 }

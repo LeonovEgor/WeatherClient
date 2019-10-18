@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,7 @@ import ru.leonov.a1l3_weather.R;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private List<WeatherData> dataSource = new ArrayList<>();
 
-    public RecyclerViewAdapter(List<WeatherData> dataSource) {
+    RecyclerViewAdapter(List<WeatherData> dataSource) {
         if(dataSource != null) {
             this.dataSource = dataSource;
         }
@@ -29,9 +28,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.item_list, parent, false);
 
-        View view = LayoutInflater.from(context)
-                .inflate(R.layout.item_list, parent, false);
         return new ViewHolder(view);
     }
 
@@ -42,7 +40,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.tvHumidity.setText(dataSource.get(position).humidity);
         holder.tvWindSpeed.setText(dataSource.get(position).windSpeed);
         holder.tvTemperature.setText(dataSource.get(position).temperature);
-        holder.tvDayOfWeek.setText(dataSource.get(position).dayOfWeek);
+        holder.tvWeatherIcon.setText(dataSource.get(position).weatherIcon);
+        holder.tvDateUpdate.setText(dataSource.get(position).updateDate);
     }
 
     @Override
@@ -56,7 +55,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView tvHumidity;
         TextView tvWindSpeed;
         TextView tvTemperature;
-        TextView tvDayOfWeek;
+        TextView tvWeatherIcon;
+        TextView tvDateUpdate;
 
         ViewHolder(View view) {
             super(view);
@@ -66,7 +66,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tvHumidity = view.findViewById(R.id.tvHumidity);
             tvWindSpeed = view.findViewById(R.id.tvWindSpeed);
             tvTemperature = view.findViewById(R.id.tvTemperature);
-            tvDayOfWeek= view.findViewById(R.id.tvDayOfWeek);
+            tvWeatherIcon = view.findViewById(R.id.tvWeatherIcon);
+            tvDateUpdate = view.findViewById(R.id.tvDate);
         }
     }
 }

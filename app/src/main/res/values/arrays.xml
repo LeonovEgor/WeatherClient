@@ -8,16 +8,7 @@
         <item>Volgorad</item>
         <item>Saratov</item>
         <item>Voronezh</item>
-    </string-array>
-
-    <string-array name="dayOfWeek">
-        <item>Monday</item>
-        <item>Tuesday</item>
-        <item>Wednesday</item>
-        <item>Thursday</item>
-        <item>Friday</item>
-        <item>Saturday</item>
-        <item>Sunday</item>
+        <item>NotFoundCity</item>
     </string-array>
 
 </resources>

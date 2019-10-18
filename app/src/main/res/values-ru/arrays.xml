@@ -8,17 +8,6 @@
         <item>Волгоград</item>
         <item>Саратов</item>
         <item>Воронеж</item>
+        <item>Не_Найденный_Город</item>
     </string-array>
-
-    <string-array name="dayOfWeek">
-        <item>Понедельник</item>
-        <item>Вторник</item>
-        <item>Среда</item>
-        <item>Четверг</item>
-        <item>Пятница</item>
-        <item>Суббота</item>
-        <item>Воскресенье</item>
-    </string-array>
-
-
 </resources>

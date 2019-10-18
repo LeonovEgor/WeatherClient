@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initToolBar();
-
     }
 
     private void initToolBar() {
@@ -131,6 +130,4 @@ public class MainActivity extends AppCompatActivity {
     private void showMessage(String message) {
         Log.d(TAG, message);
     }
-
-
 }

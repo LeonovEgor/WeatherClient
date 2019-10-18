@@ -11,22 +11,29 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 import ru.leonov.a1l3_weather.Data.DataSource;
+import ru.leonov.a1l3_weather.Data.ResponseCallback;
+import ru.leonov.a1l3_weather.Data.WeatherData;
 import ru.leonov.a1l3_weather.Data.WeatherDataSource;
 import ru.leonov.a1l3_weather.R;
 
-public class WeatherDetailFragment extends Fragment{
+public class WeatherDetailFragment extends Fragment implements ResponseCallback {
 
     private static final String TAG = "WEATHER";
     private static final String CITY_VALUE_KEY = "cityKey";
 
     private RecyclerView recyclerView;
-
+    private final Handler handler = new Handler();
 
     static WeatherDetailFragment create(int index) {
         WeatherDetailFragment fragment = new WeatherDetailFragment();
@@ -68,7 +75,6 @@ public class WeatherDetailFragment extends Fragment{
 
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.recyclerView);
-
     }
 
     private void initRecyclerView() {
@@ -80,10 +86,30 @@ public class WeatherDetailFragment extends Fragment{
 
         DataSource source = new WeatherDataSource(getResources());
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity.getBaseContext());
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(source.getDataSource(getIndex()));
-
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        source.requestDataSource(getIndex(),this);
+    }
+
+    @Override
+    public void response(final ArrayList<WeatherData> response) {
+        if(response == null) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(Objects.requireNonNull(getActivity()).getBaseContext(),
+                            R.string.place_not_found,
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+        } else {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    RecyclerViewAdapter adapter = new RecyclerViewAdapter(response);
+                    recyclerView.setAdapter(adapter);
+                }
+            });
+        }
     }
 
     //region для задания
@@ -143,5 +169,4 @@ public class WeatherDetailFragment extends Fragment{
         Log.d(TAG, this.getClass().getName() + " - onDestroyView");
     }
     //endregion
-
 }

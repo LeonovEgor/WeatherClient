@@ -1,25 +1,20 @@
 package ru.leonov.a1l3_weather.Data;
 
 import android.content.res.Resources;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import ru.leonov.a1l3_weather.R;
 
 public class WeatherDataSource implements DataSource{
-    private final Handler handler = new Handler();
+
     private final static String LOG_TAG = WeatherDataSource.class.getSimpleName();
 
     private Resources resources;
@@ -27,62 +22,24 @@ public class WeatherDataSource implements DataSource{
     public WeatherDataSource(Resources res) {
         this.resources = res;
     }
+
     @Override
-    public List<WeatherData> getDataSource(int cityIndex) {
+    public void requestDataSource(int cityIndex, ResponseCallback callback) {
         String city = resources.getStringArray(R.array.cities)[cityIndex];
-        RawWeatherData[] rawData = updateWeatherData(city);
-        List<WeatherData> list = new ArrayList<>(rawData.length);
-        for(int i=0; i<rawData.length; i++) {
-            list.add(
-                new WeatherData(
-                    city,
-                    GetParam(R.string.pressure, new Random().nextInt(1000), R.string.pressureDimension),
-                    GetParam(R.string.humidity, new Random().nextInt(100), R.string.humidityDimension),
-                    GetParam(R.string.windSpeed, new Random().nextInt(40), R.string.windSpeedDimension),
-                    GetParam(R.string.temperature, new Random().nextInt(50), R.string.celsiusDimension),
-                    "" /*dayOfWeek[i]*/
-                )
-            );
-        }
-
-        return list;
+        updateWeatherData(city, callback);
     }
 
-    private String GetParam(int resourceParamName, int value, int resourceParamDimensionName) {
-
-        return getFullParameterString(
-                resources.getString(resourceParamName),
-                String.valueOf(value),
-                resources.getString(resourceParamDimensionName));
-    }
-
-    private String getFullParameterString(String paramName, String paramValue, String paramDimension) {
-        return String.format("%s: %s %s", paramName, paramValue, paramDimension);
-    }
-
-    private RawWeatherData[] updateWeatherData(final String city) {
-        RawWeatherData[] rawData = new RawWeatherData[16];
+    private void updateWeatherData(final String city, final ResponseCallback callback) {
 
         Thread requestThread = new Thread() {
             @Override
             public void run() {
                 final JSONObject jsonObject = WeatherDataLoader.getJSONData(city);
-                if(jsonObject == null) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(null, R.string.place_not_found,
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            rawData = renderWeather(jsonObject);
-                        }
-                    });
+                if(jsonObject != null) {
+                    final ArrayList<WeatherData> data = renderWeather(jsonObject);
+                    callback.response(data);
                 }
+                else callback.response(null);
             }
         };
         requestThread.start();
@@ -91,56 +48,76 @@ public class WeatherDataSource implements DataSource{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //TODO: fix it
-        return rawData;
     }
 
-    private RawWeatherData[] renderWeather(JSONObject jsonObject) {
+    private ArrayList<WeatherData> renderWeather(JSONObject jsonObject) {
         Log.d(LOG_TAG, "json: " + jsonObject.toString());
+        ArrayList<WeatherData> list = new ArrayList<>();
+
         try {
             JSONObject details = jsonObject.getJSONArray("weather").getJSONObject(0);
             JSONObject main = jsonObject.getJSONObject("main");
+            JSONObject wind = jsonObject.getJSONObject("wind");
 
-            setPlaceName(jsonObject);
-            setDetails(details, main);
-            setCurrentTemp(main);
-            setUpdatedText(jsonObject);
-            setWeatherIcon(details.getInt("id"),
+            String city = getPlaceName(jsonObject);
+            String pressure = GetText(R.string.pressure, getParam(main, "pressure"),
+                    R.string.pressureDimension);
+            String humidity = GetText(R.string.humidity, getParam(main, "humidity"),
+                    R.string.humidityDimension);
+            String windSpeed = WindSpeed(wind);
+            String temperature = getTemperature(main);
+            String date = getUpdateDate(jsonObject);
+            String weatherIcon = getWeatherIcon(details.getInt("id"),
                     jsonObject.getJSONObject("sys").getLong("sunrise") * 1000,
                     jsonObject.getJSONObject("sys").getLong("sunset") * 1000);
+
+            list.add(new WeatherData(city, pressure,
+                    humidity, windSpeed, temperature, weatherIcon, date));
         } catch (Exception exc) {
+            list.add(new WeatherData(
+                    resources.getString(R.string.error),
+                    resources.getString(R.string.error),
+                    resources.getString(R.string.error),
+                    resources.getString(R.string.error),
+                    resources.getString(R.string.error),
+                    resources.getString(R.string.error),
+                    resources.getString(R.string.error)));
             exc.printStackTrace();
             Log.e(LOG_TAG, "One or more fields not found in the JSON data");
         }
+        return list;
     }
 
-    private void setPlaceName(JSONObject jsonObject) throws JSONException {
-        String cityText = jsonObject.getString("name").toUpperCase() + ", "
+    private String getPlaceName(JSONObject jsonObject) throws JSONException {
+        return jsonObject.getString("name").toUpperCase() + ", "
                 + jsonObject.getJSONObject("sys").getString("country");
-        cityTextView.setText(cityText);
     }
 
-    private void setDetails(JSONObject details, JSONObject main) throws JSONException {
-        String detailsText = details.getString("description").toUpperCase() + "\n"
-                + "Humidity: " + main.getString("humidity") + "%" + "\n"
-                + "Pressure: " + main.getString("pressure") + "hPa";
-        detailsTextView.setText(detailsText);
+    private String getParam(JSONObject jsonObject, String paramName) throws JSONException {
+        return jsonObject.getString(paramName);
     }
 
-    private void setCurrentTemp(JSONObject main) throws JSONException {
-        String currentTextText = String.format(Locale.getDefault(), "%.2f",
-                main.getDouble("temp")) + "\u2103";
-        currentTemperatureTextView.setText(currentTextText);
+    private String getTemperature(JSONObject main) throws JSONException {
+        return String.format(Locale.getDefault(), "%s: %.0f %s",
+                resources.getString(R.string.temperature),
+                        Math.ceil(main.getDouble("temp")),
+                        resources.getString(R.string.celsiusDimension));
     }
 
-    private void setUpdatedText(JSONObject jsonObject) throws JSONException {
+    private String WindSpeed(JSONObject wind) throws JSONException {
+        return String.format(Locale.getDefault(),
+                "%s: %.0f %s",
+                resources.getString(R.string.windSpeed),
+                        Math.ceil(wind.getDouble("speed")),
+                resources.getString(R.string.windSpeedDimension));
+    }
+
+    private String getUpdateDate(JSONObject jsonObject) throws JSONException {
         DateFormat dateFormat = DateFormat.getDateTimeInstance();
-        String updateOn = dateFormat.format(new Date(jsonObject.getLong("dt") * 1000));
-        String updatedText = "Last update: " + updateOn;
-        updatedTextView.setText(updatedText);
+        return dateFormat.format(new Date(jsonObject.getLong("dt") * 1000));
     }
 
-    private void setWeatherIcon(int actualId, long sunrise, long sunset) {
+    private String getWeatherIcon(int actualId, long sunrise, long sunset) {
         int id = actualId / 100;
         String icon = "";
 
@@ -181,8 +158,17 @@ public class WeatherDataSource implements DataSource{
                 }
             }
         }
-        weatherIconTextView.setText(icon);
+        return icon;
     }
 
+    private String GetText(int resourceParamName, String value, int resourceParamDimensionName) {
+        return getFullParameterString(
+                resources.getString(resourceParamName),
+                value,
+                resources.getString(resourceParamDimensionName));
+    }
 
+    private String getFullParameterString(String paramName, String paramValue, String paramDimension) {
+        return String.format("%s: %s %s", paramName, paramValue, paramDimension);
+    }
 }

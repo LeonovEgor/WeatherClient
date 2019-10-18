@@ -7,14 +7,14 @@
     <string name="humidityDimension">%</string>
 
     <string name="pressure">Pressure</string>
-    <string name="pressureDimension">мм рт.ст.</string>
+    <string name="pressureDimension">mm Hg</string>
 
     <string name="windSpeed">Wind speed</string>
     <string name="windSpeedDimension">m/s</string>
 
     <string name="temperature">Temperature</string>
 
-    <string name="celsiusDimension">C</string>
+    <string name="celsiusDimension">&#8451;</string>
 
     <string name="empty_list">List is empty</string>
 
@@ -28,6 +28,7 @@
     <string name="fahrenheitDimension">F</string>
     <string name="ok">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="dateSrt">Updated</string>
 
     <string name="place_not_found">Place not found</string>
     <string name="weather_sunny">&#xf00d;</string>
@@ -38,5 +39,7 @@
     <string name="weather_snowy">&#xf01b;</string>
     <string name="weather_thunder">&#xf01e;</string>
     <string name="weather_drizzle">&#xf01c;</string>
+    <string name="error">Ошибка</string>
+
 
 </resources>

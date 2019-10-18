@@ -1,14 +1,12 @@
 package ru.leonov.a1l3_weather;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 import ru.leonov.a1l3_weather.Fragments.WeatherDetailFragment;
 
 public class WeatherDetailActivity extends AppCompatActivity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +29,5 @@ public class WeatherDetailActivity extends AppCompatActivity {
                     .replace(R.id.weatherDetailFrame, details)
                     .commit();
         }
-
-
     }
 }

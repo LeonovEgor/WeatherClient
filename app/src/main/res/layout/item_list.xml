@@ -26,14 +26,25 @@
             android:src="@drawable/ic_today_black_24dp"/>
 
         <TextView
-            android:id="@+id/tvDayOfWeek"
+            android:id="@+id/tvDate"
             style="@style/CardTitleStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@string/cityStr"
+            android:text="@string/dateSrt"
             app:layout_constraintStart_toEndOf="@id/cityImage"
             app:layout_constraintTop_toTopOf="@id/cityImage" />
+
+        <TextView
+            android:id="@+id/tvWeatherIcon"
+            style="@style/CardTitleStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textSize="40sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDate" />
 
         <TextView
             android:id="@+id/tvPressure"
@@ -43,7 +54,7 @@
             android:layout_marginTop="28dp"
             android:text="@string/pressure"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cityImage" />
+            app:layout_constraintTop_toBottomOf="@id/tvWeatherIcon" />
 
         <TextView
             android:id="@+id/tvHumidity"
@@ -77,7 +88,7 @@
             style="@style/ViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/temperature"
+            android:text="@string/cityStr"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTemperature" />
 
