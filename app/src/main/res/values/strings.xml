@@ -51,5 +51,7 @@
     <string name="nav_header_title">Weather</string>
     <string name="nav_header_desc">Weather desc</string>
     <string name="nav_header_subtitle">GeekBrains A2 course</string>
+    <string name="menu_city">City</string>
+    <string name="SomeWrong">Something went wrong!</string>
 
 </resources>

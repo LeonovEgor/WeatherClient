@@ -2,6 +2,7 @@ package ru.leonov.a1l3_weather.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
     private static final String TAG = "WEATHER";
     private static final String CITY_VALUE_KEY = "cityKey";
 
+    private Typeface weatherFont;
     private RecyclerView recyclerView;
     private final Handler handler = new Handler();
 
@@ -69,6 +71,7 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
         super.onViewCreated(view, savedInstanceState);
 
         Log.d(TAG, this.getClass().getName() + " - onViewCreated");
+
         initViews(view);
         initRecyclerView();
     }
@@ -111,62 +114,4 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
             });
         }
     }
-
-    //region для задания
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        Log.d(TAG, this.getClass().getName() + " - onAttach");
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Log.d(TAG, this.getClass().getName() + " - onCreate");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        Log.d(TAG, this.getClass().getName() + " - onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        Log.d(TAG, this.getClass().getName() + " - onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        Log.d(TAG, this.getClass().getName() + " - onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        Log.d(TAG, this.getClass().getName() + " - onStop");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        Log.d(TAG, this.getClass().getName() + " - onDestroyView");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        Log.d(TAG, this.getClass().getName() + " - onDestroyView");
-    }
-    //endregion
 }

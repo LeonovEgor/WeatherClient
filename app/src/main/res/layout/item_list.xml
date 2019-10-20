@@ -37,14 +37,15 @@
 
         <TextView
             android:id="@+id/tvWeatherIcon"
-            style="@style/CardTitleStyle"
+            style="@style/CardIconStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textSize="40sp"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvDate" />
+            app:layout_constraintTop_toBottomOf="@id/tvDate"/>
 
         <TextView
             android:id="@+id/tvPressure"

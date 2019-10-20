@@ -13,10 +13,12 @@ import android.widget.ArrayAdapter;
 
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -99,112 +101,24 @@ public class SelectCityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "onItemClick");
                 currentPosition = position;
-                showSnackbar(listView);
-
+                showWeatherDetail();
             }
         });
     }
 
-    // Задание: 3. Добавьте snackBar для подтверждения действий пользователя.
-    private void showSnackbar(View view) {
-        String city;
-        try {
-            String[] cities = getResources().getStringArray(R.array.cities);
-            city = cities[currentPosition];
-        }
-        catch (Exception e) {
-            Log.d(TAG, "Ошибка получения города из списка: " + e.getMessage());
-            return;
-        }
-
-        Snackbar.make(view, city, Snackbar.LENGTH_LONG)
-                .setAction(getString(R.string.confirm), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showWeatherDetail();
-                    }
-                }).show();
-    }
-
     private void showWeatherDetail() {
-        if (isExistWeatherDetail) {
-            listView.setItemChecked(currentPosition, true);
-            WeatherDetailFragment detail = (WeatherDetailFragment)
-                    Objects.requireNonNull(getFragmentManager()).findFragmentById(R.id.weatherDetailContainer);
-
-            if (detail == null || detail.getIndex() != currentPosition) {
-                detail = WeatherDetailFragment.create(currentPosition);
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.weatherDetailContainer, detail)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .addToBackStack(BACK_STACK_KEY)
-                        .commit();
-            }
-        } else {
-            Intent intent = new Intent();
-            intent.setClass(Objects.requireNonNull(getActivity()), WeatherDetailActivity.class);
-            intent.putExtra(CITY_VALUE_KEY, currentPosition);
-            startActivity(intent);
+        listView.setItemChecked(currentPosition, true);
+        WeatherDetailFragment detail = (WeatherDetailFragment)
+                Objects.requireNonNull(getFragmentManager()).findFragmentById(R.id.weatherDetailContainer);
+        if (detail == null) {
+            detail = WeatherDetailFragment.create(currentPosition);
         }
-    }
 
-    // для задания
-
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        Log.d(TAG, this.getClass().getName() + " - onAttach");
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Log.d(TAG, this.getClass().getName() + " - onCreate");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        Log.d(TAG, this.getClass().getName() + " - onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        Log.d(TAG, this.getClass().getName() + " - onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        Log.d(TAG, this.getClass().getName() + " - onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        Log.d(TAG, this.getClass().getName() + " - onStop");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        Log.d(TAG, this.getClass().getName() + " - onDestroyView");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        Log.d(TAG, this.getClass().getName() + " - onDestroyView");
+        getFragmentManager()
+                .beginTransaction()
+                .replace(isExistWeatherDetail ? R.id.weatherDetailContainer: R.id.container, detail)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .addToBackStack(BACK_STACK_KEY)
+                .commit();
     }
 }

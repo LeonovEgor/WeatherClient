@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".AboutActivity" />
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".Fragments.SettingsFragment" />
         <activity android:name=".WeatherDetailActivity" />
         <activity
             android:name=".MainActivity"

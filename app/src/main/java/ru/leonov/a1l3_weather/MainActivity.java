@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,10 +14,14 @@ import android.view.MenuItem;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Objects;
+
+import ru.leonov.a1l3_weather.Fragments.SelectCityFragment;
+import ru.leonov.a1l3_weather.Fragments.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -80,7 +86,7 @@ public class MainActivity extends AppCompatActivity
 
     private void showSettingsActivity() {
         Intent intent = new Intent();
-        intent.setClass(Objects.requireNonNull(getBaseContext()), SettingsActivity.class);
+        intent.setClass(Objects.requireNonNull(getBaseContext()), SettingsFragment.class);
         startActivity(intent);
     }
 
@@ -93,20 +99,37 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
+        // Создадим новый фрагмент
+        Fragment fragment = null;
+        Class fragmentClass = null;
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_add) {
-
-        } else if (id == R.id.nav_change) {
-
-        } else if (id == R.id.nav_remove) {
-
+        if (id == R.id.nav_city) {
+            fragmentClass = SelectCityFragment.class;
         } else if (id == R.id.nav_settings) {
-
+            fragmentClass = SettingsFragment.class;
         } else if (id == R.id.nav_about) {
 
         }
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getBaseContext(), R.string.SomeWrong, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        // Вставляем фрагмент, заменяя текущий фрагмент
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        // Выделяем выбранный пункт меню в шторке
+        //item.setChecked(true);
+        // Выводим выбранный пункт в заголовке
+        //setTitle(item.getTitle());
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -114,10 +137,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        int countOfFragmentInManager = getSupportFragmentManager().getBackStackEntryCount();
-        if(countOfFragmentInManager > 0) {
-            getSupportFragmentManager().popBackStack();
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+            int countOfFragmentInManager = getSupportFragmentManager().getBackStackEntryCount();
+            if(countOfFragmentInManager > 0) {
+                getSupportFragmentManager().popBackStack();
+            }
         }
     }
 
