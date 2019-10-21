@@ -20,13 +20,14 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.Objects;
 
+import ru.leonov.a1l3_weather.Fragments.AboutFragment;
 import ru.leonov.a1l3_weather.Fragments.SelectCityFragment;
 import ru.leonov.a1l3_weather.Fragments.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "TAG";
+    private static final String TAG = "WEATHER";
     private DrawerLayout drawer;
     private Toolbar toolbar;
 
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity
 
         initToolBar();
         initSideMenu();
+        showSelectCityFragment();
     }
 
     private void initToolBar() {
@@ -56,6 +58,16 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    private void showSelectCityFragment() {
+        Fragment fragment = null;
+        try {
+            fragment = Objects.requireNonNull(SelectCityFragment.class).newInstance();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        } catch (IllegalAccessException | InstantiationException e) {
+            Log.e(TAG, Objects.requireNonNull(e.getMessage()));
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,34 +85,19 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            showSettingsActivity();
             return true;
         }
         if (id == R.id.action_about) {
-            showAboutActivity();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void showSettingsActivity() {
-        Intent intent = new Intent();
-        intent.setClass(Objects.requireNonNull(getBaseContext()), SettingsFragment.class);
-        startActivity(intent);
-    }
 
-    private void showAboutActivity() {
-        Intent intent = new Intent();
-        intent.setClass(Objects.requireNonNull(getBaseContext()), AboutActivity.class);
-        startActivity(intent);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        // Создадим новый фрагмент
         Fragment fragment = null;
         Class fragmentClass = null;
 
@@ -112,24 +109,18 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
             fragmentClass = SettingsFragment.class;
         } else if (id == R.id.nav_about) {
-
+            fragmentClass = AboutFragment.class;
         }
 
         try {
-            fragment = (Fragment) fragmentClass.newInstance();
+            fragment = (Fragment) Objects.requireNonNull(fragmentClass).newInstance();
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getBaseContext(), R.string.SomeWrong, Toast.LENGTH_LONG).show();
             return false;
         }
 
-        // Вставляем фрагмент, заменяя текущий фрагмент
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-        // Выделяем выбранный пункт меню в шторке
-        //item.setChecked(true);
-        // Выводим выбранный пункт в заголовке
-        //setTitle(item.getTitle());
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -149,13 +140,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    //region  [ для задания ]
-    @Override
-    protected void onStart() {
-        super.onStart();
-        showMessage(this.getClass().getName() + " - onStart()");
-    }
-
     @Override
     protected void onRestoreInstanceState(Bundle saveInstanceState){
         super.onRestoreInstanceState(saveInstanceState);
@@ -163,41 +147,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        showMessage(this.getClass().getName() + " - onResume()");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        showMessage(this.getClass().getName() + " - onPause()");
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle saveInstanceState){
         super.onSaveInstanceState(saveInstanceState);
         showMessage(this.getClass().getName() + " - onSaveInstanceState()");
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        showMessage(this.getClass().getName() + " - onStop()");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        showMessage(this.getClass().getName() + " - onRestart()");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        showMessage(this.getClass().getName() + " - onDestroy()");
-    }
-    //endregion
 
     private void showMessage(String message) {
         Log.d(TAG, message);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">A1L8_Погода</string>
+    <string name="app_name">A2L1_Погода</string>
 
     <string name="cityStr">Город</string>
 
@@ -48,12 +48,13 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_about">About</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Weather</string>
-    <string name="nav_header_desc">Weather desc</string>
+    <string name="navigation_drawer_open">Панель навигации открыта</string>
+    <string name="navigation_drawer_close">Панель навигации закрыта</string>
+    <string name="nav_header_title">Погода</string>
+    <string name="nav_header_desc">Погода - описание</string>
     <string name="nav_header_subtitle">GeekBrains A2 course</string>
-    <string name="menu_city">City</string>
+    <string name="menu_city">Город</string>
     <string name="SomeWrong">Что-то пошло не так!</string>
+    <string name="android_advansed_course">Android Продвинутый</string>
 
 </resources>

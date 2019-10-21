@@ -1,7 +1,5 @@
 package ru.leonov.a1l3_weather.Fragments;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,20 +11,15 @@ import android.widget.ArrayAdapter;
 
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
 import ru.leonov.a1l3_weather.R;
-import ru.leonov.a1l3_weather.WeatherDetailActivity;
 
 
 public class SelectCityFragment extends Fragment {

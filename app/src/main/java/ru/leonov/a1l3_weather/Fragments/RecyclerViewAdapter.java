@@ -1,6 +1,8 @@
 package ru.leonov.a1l3_weather.Fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView tvCity;
         TextView tvPressure;
         TextView tvHumidity;
@@ -61,6 +64,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ViewHolder(View view) {
             super(view);
 
+            initView(view);
+            setFont(view);
+        }
+
+        private void initView(View view) {
             tvCity = view.findViewById(R.id.tvCity);
             tvPressure = view.findViewById(R.id.tvPressure);
             tvHumidity = view.findViewById(R.id.tvHumidity);
@@ -69,5 +77,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tvWeatherIcon = view.findViewById(R.id.tvWeatherIcon);
             tvDateUpdate = view.findViewById(R.id.tvDate);
         }
+
+        private void setFont(View view) {
+            Typeface weatherFont = Typeface.createFromAsset(itemView.getContext().getAssets(),
+                    "fonts/weather.ttf");
+            tvWeatherIcon.setTypeface(weatherFont);
+        }
+
     }
 }
