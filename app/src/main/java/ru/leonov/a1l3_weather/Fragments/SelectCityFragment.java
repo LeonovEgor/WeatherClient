@@ -91,16 +91,8 @@ public class SelectCityFragment extends Fragment {
 
         Log.d(TAG, this.getClass().getName() + " - onActivityCreated");
 
-        isExistWeatherDetail = getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_LANDSCAPE;
-
         if (savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt(CITY_VALUE_KEY, 0);
-        }
-
-        if (isExistWeatherDetail) {
-            listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            showWeatherDetail();
         }
     }
 

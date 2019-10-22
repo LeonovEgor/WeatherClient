@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity
                 .addToBackStack(BACK_STACK_KEY)
                 .commit();
 
-
         return super.onOptionsItemSelected(item);
     }
 
