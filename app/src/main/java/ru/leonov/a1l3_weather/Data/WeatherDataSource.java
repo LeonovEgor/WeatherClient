@@ -24,8 +24,7 @@ public class WeatherDataSource implements DataSource{
     }
 
     @Override
-    public void requestDataSource(int cityIndex, ResponseCallback callback) {
-        String city = resources.getStringArray(R.array.cities)[cityIndex];
+    public void requestDataSource(String city, ResponseCallback callback) {
         updateWeatherData(city, callback);
     }
 

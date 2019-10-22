@@ -1,9 +1,13 @@
 package ru.leonov.a1l3_weather.Fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,13 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -33,28 +30,27 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
     private static final String TAG = "WEATHER";
     private static final String CITY_VALUE_KEY = "cityKey";
 
-    private Typeface weatherFont;
     private RecyclerView recyclerView;
     private final Handler handler = new Handler();
 
-    static WeatherDetailFragment create(int index) {
+    static WeatherDetailFragment create(String city) {
         WeatherDetailFragment fragment = new WeatherDetailFragment();
 
         Bundle args = new Bundle();
-        args.putInt(CITY_VALUE_KEY, index);
+        args.putString(CITY_VALUE_KEY, city);
         fragment.setArguments(args);
 
         return fragment;
     }
 
-    // Получить индекс из списка (фактически из параметра)
-    int getIndex() {
-        int index = 0;
+    // Получить город из списка (фактически из параметра)
+    private String getCity() {
+        String city = "";
         if (getArguments() != null) {
-            index = getArguments().getInt(CITY_VALUE_KEY, 0);
+            city = getArguments().getString(CITY_VALUE_KEY, "No_City_Found");
         }
 
-        return index;
+        return city;
     }
 
     @Override
@@ -90,7 +86,7 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
         DataSource source = new WeatherDataSource(getResources());
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity.getBaseContext());
         recyclerView.setLayoutManager(layoutManager);
-        source.requestDataSource(getIndex(),this);
+        source.requestDataSource(getCity(),this);
     }
 
     @Override

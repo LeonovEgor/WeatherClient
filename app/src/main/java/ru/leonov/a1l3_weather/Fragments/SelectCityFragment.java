@@ -3,14 +3,10 @@ package ru.leonov.a1l3_weather.Fragments;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,16 +16,17 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.util.Objects;
 
+import ru.leonov.a1l3_weather.Data.CityHelper;
 import ru.leonov.a1l3_weather.R;
 
 
@@ -76,7 +73,7 @@ public class SelectCityFragment extends Fragment {
         listView.setEmptyView(emptyTextView);
         registerForContextMenu(listView);
 
-        adapter.addAll(getCityList());
+        adapter.addAll(CityHelper.getCityList());
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -86,10 +83,6 @@ public class SelectCityFragment extends Fragment {
                 showWeatherDetail();
             }
         });
-    }
-
-    private String[] getCityList() {
-        return new String[] {"Moscow", "Vladimir", "Volgograd", "Kazan", "NoCityFound"};
     }
 
     @Override
@@ -128,7 +121,7 @@ public class SelectCityFragment extends Fragment {
 
         switch (id) {
             case R.id.action_add: {
-                addItem(item);
+                addItem();
                 break;
             }
 
@@ -143,11 +136,11 @@ public class SelectCityFragment extends Fragment {
         }
     }
 
-    private void addItem(MenuItem item) {
-        showInputDialog(item);
+    private void addItem() {
+        addInputDialog();
     }
 
-    private void showInputDialog(MenuItem item) {
+    private void addInputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
         builder.setTitle(R.string.add_city);
 
@@ -166,8 +159,27 @@ public class SelectCityFragment extends Fragment {
     private void editItem(@NonNull MenuItem item) {
         AdapterView.AdapterContextMenuInfo info =
                 (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        String sItem = adapter.getItem(info.position);
-        sItem = "3334455";
+
+        editInputDialog(info.position);
+    }
+
+    private void editInputDialog(int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+        builder.setTitle(R.string.add_city);
+        final int finalPosition = position;
+        final EditText input = new EditText(getContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText(adapter.getItem(position));
+        builder.setView(input);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String sItem = adapter.getItem(finalPosition);
+                adapter.remove(sItem);
+                adapter.insert(input.getText().toString(), finalPosition);
+            }
+        });
+        builder.show();
     }
 
     private void removeItem(@NonNull MenuItem item) {
@@ -187,15 +199,18 @@ public class SelectCityFragment extends Fragment {
 
     private void showWeatherDetail() {
         listView.setItemChecked(currentPosition, true);
-        WeatherDetailFragment detail = (WeatherDetailFragment)
-                Objects.requireNonNull(getFragmentManager()).findFragmentById(R.id.weatherDetailContainer);
-        if (detail == null) {
-            detail = WeatherDetailFragment.create(currentPosition);
+        String city = (String) listView.getAdapter().getItem(currentPosition);
+        WeatherDetailFragment detail = WeatherDetailFragment.create(city);
+
+        FragmentManager manager = getFragmentManager();
+        if (manager == null) {
+            Log.e(TAG, "Ошибка смены Fragment");
+            return;
         }
 
         getFragmentManager()
                 .beginTransaction()
-                .replace(isExistWeatherDetail ? R.id.weatherDetailContainer: R.id.container, detail)
+                .replace(R.id.container, detail)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack(BACK_STACK_KEY)
                 .commit();

@@ -20,12 +20,9 @@
     <string name="empty_list">Список пуст</string>
 
     <string name="action_settings">Установки</string>
-    <string name="confirm">Подтвердите</string>
     <string name="about">О программе</string>
     <string name="geekbrains_university">Университет GeekBrains</string>
-    <string name="android_start_course">Android Start cource</string>
     <string name="student">Студент: Леонов ЕА</string>
-    <string name="close">Закрыть</string>
     <string name="fahrenheitDimension">F</string>
     <string name="ok">Сохранить</string>
     <string name="cancel">Отмена</string>
@@ -55,8 +52,7 @@
     <string name="nav_header_subtitle">GeekBrains A2 course</string>
     <string name="menu_city">Город</string>
     <string name="SomeWrong">Что-то пошло не так!</string>
-    <string name="android_advansed_course">Android Продвинутый</string>
-    <string name="action_edit">Edit</string>
+    <string name="android_advanced_course">Android Продвинутый</string>
     <string name="add_city">Add city</string>
 
 </resources>

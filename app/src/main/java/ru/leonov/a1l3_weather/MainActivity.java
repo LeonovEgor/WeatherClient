@@ -1,20 +1,17 @@
 package ru.leonov.a1l3_weather;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
-import android.view.Menu;
-import android.view.MenuItem;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -61,7 +58,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showSelectCityFragment() {
-        Fragment fragment = null;
+        Fragment fragment;
         try {
             fragment = Objects.requireNonNull(SelectCityFragment.class).newInstance();
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
@@ -83,15 +80,32 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        Fragment fragment;
+        Class fragmentClass = null;
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            fragmentClass = SettingsFragment.class;
         }
-        if (id == R.id.action_about) {
-            return true;
+        else if (id == R.id.action_about) {
+            fragmentClass = AboutFragment.class;
         }
+
+        try {
+            fragment = (Fragment) Objects.requireNonNull(fragmentClass).newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getBaseContext(), R.string.SomeWrong, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, fragment)
+                .addToBackStack(BACK_STACK_KEY)
+                .commit();
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -100,7 +114,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        Fragment fragment = null;
+        Fragment fragment;
         Class fragmentClass = null;
 
         // Handle navigation view item clicks here.
