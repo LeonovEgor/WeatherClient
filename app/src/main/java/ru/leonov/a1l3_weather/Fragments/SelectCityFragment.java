@@ -1,19 +1,30 @@
 package ru.leonov.a1l3_weather.Fragments;
 
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -32,11 +43,13 @@ public class SelectCityFragment extends Fragment {
 
     private ListView listView;
     private TextView emptyTextView;
+    private ArrayAdapter<String> adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, this.getClass().getName() + " - onCreateView");
+
         return inflater.inflate(R.layout.fragment_select_city, container, false);
     }
 
@@ -48,6 +61,35 @@ public class SelectCityFragment extends Fragment {
 
         initViews(view);
         initList();
+    }
+
+    private void initViews(View view) {
+        listView = view.findViewById(R.id.cities_list_view);
+        emptyTextView = view.findViewById(R.id.cities_list_empty_view);
+    }
+
+    private void initList() {
+        adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),
+                android.R.layout.simple_list_item_activated_1);
+
+        listView.setAdapter(adapter);
+        listView.setEmptyView(emptyTextView);
+        registerForContextMenu(listView);
+
+        adapter.addAll(getCityList());
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "onItemClick");
+                currentPosition = position;
+                showWeatherDetail();
+            }
+        });
+    }
+
+    private String[] getCityList() {
+        return new String[] {"Moscow", "Vladimir", "Volgograd", "Kazan", "NoCityFound"};
     }
 
     @Override
@@ -70,33 +112,77 @@ public class SelectCityFragment extends Fragment {
     }
 
     @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        Objects.requireNonNull(getActivity()).getMenuInflater().inflate(R.menu.menu_context, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        handleMenuItemClick(item);
+        return super.onContextItemSelected(item);
+    }
+
+    private void handleMenuItemClick(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_add: {
+                addItem(item);
+                break;
+            }
+
+            case R.id.action_edit: {
+                editItem(item);
+                break;
+            }
+            case R.id.action_remove: {
+                removeItem(item);
+                break;
+            }
+        }
+    }
+
+    private void addItem(MenuItem item) {
+        showInputDialog(item);
+    }
+
+    private void showInputDialog(MenuItem item) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+        builder.setTitle(R.string.add_city);
+
+        final EditText input = new EditText(getContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                adapter.add(input.getText().toString());
+            }
+        });
+        builder.show();
+    }
+
+    private void editItem(@NonNull MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        String sItem = adapter.getItem(info.position);
+        sItem = "3334455";
+    }
+
+    private void removeItem(@NonNull MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        String sItem = adapter.getItem(info.position);
+        adapter.remove(sItem);
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         Log.d(TAG, this.getClass().getName() + " - onSaveInstanceState");
 
         outState.putInt(CITY_VALUE_KEY, currentPosition);
         super.onSaveInstanceState(outState);
-    }
-
-    private void initViews(View view) {
-        listView = view.findViewById(R.id.cities_list_view);
-        emptyTextView = view.findViewById(R.id.cities_list_empty_view);
-    }
-
-    private void initList() {
-        ArrayAdapter adapter =
-                ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()), R.array.cities,
-                        android.R.layout.simple_list_item_activated_1);
-        listView.setAdapter(adapter);
-        listView.setEmptyView(emptyTextView);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "onItemClick");
-                currentPosition = position;
-                showWeatherDetail();
-            }
-        });
     }
 
     private void showWeatherDetail() {

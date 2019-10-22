@@ -56,5 +56,7 @@
     <string name="menu_city">Город</string>
     <string name="SomeWrong">Что-то пошло не так!</string>
     <string name="android_advansed_course">Android Продвинутый</string>
+    <string name="action_edit">Edit</string>
+    <string name="add_city">Add city</string>
 
 </resources>

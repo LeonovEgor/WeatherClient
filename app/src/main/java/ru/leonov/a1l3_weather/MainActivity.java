@@ -27,7 +27,9 @@ import ru.leonov.a1l3_weather.Fragments.SettingsFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String BACK_STACK_KEY = "backStackKey";
     private static final String TAG = "WEATHER";
+
     private DrawerLayout drawer;
     private Toolbar toolbar;
 
@@ -120,7 +122,11 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, fragment)
+                .addToBackStack(BACK_STACK_KEY)
+                .commit();
 
         drawer.closeDrawer(GravityCompat.START);
         return true;

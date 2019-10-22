@@ -55,5 +55,7 @@
     <string name="menu_city">City</string>
     <string name="SomeWrong">Something went wrong!</string>
     <string name="android_advansed_course">Android Advanced</string>
+    <string name="action_edit">Edit</string>
+    <string name="add_city">Add city</string>
 
 </resources>
