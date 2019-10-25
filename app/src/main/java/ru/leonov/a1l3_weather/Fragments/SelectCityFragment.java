@@ -1,8 +1,12 @@
 package ru.leonov.a1l3_weather.Fragments;
 
 import android.content.DialogInterface;
-import android.content.res.Configuration;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -24,10 +28,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.List;
 import java.util.Objects;
 
 import ru.leonov.a1l3_weather.Data.CityHelper;
 import ru.leonov.a1l3_weather.R;
+
+import static android.content.Context.SENSOR_SERVICE;
 
 
 public class SelectCityFragment extends Fragment {
@@ -35,12 +42,21 @@ public class SelectCityFragment extends Fragment {
     private static final String CITY_VALUE_KEY = "cityKey";
     private static final String BACK_STACK_KEY = "backStackKey";
 
-    private boolean isExistWeatherDetail;  // Можно ли расположить рядом фрагмент данными погоды
+    private final Handler handler = new Handler();
+
     private int currentPosition = 0;    // Текущая позиция (выбранный город)
 
+    private TextView currentTemperature;
+    private TextView currentHumidity;
+    private TextView currentPressure;
     private ListView listView;
     private TextView emptyTextView;
     private ArrayAdapter<String> adapter;
+
+    private SensorManager sensorManager;
+    private Sensor sensorTemperature;
+    private Sensor sensorHumidity;
+    private Sensor sensorPressure;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,9 +74,13 @@ public class SelectCityFragment extends Fragment {
 
         initViews(view);
         initList();
+        getSensors(view);
     }
 
     private void initViews(View view) {
+        currentTemperature = view.findViewById(R.id.currentTemperature);
+        currentHumidity = view.findViewById(R.id.currentHumidity);
+        currentPressure = view.findViewById(R.id.currentPressure);
         listView = view.findViewById(R.id.cities_list_view);
         emptyTextView = view.findViewById(R.id.cities_list_empty_view);
     }
@@ -83,6 +103,18 @@ public class SelectCityFragment extends Fragment {
                 showWeatherDetail();
             }
         });
+    }
+
+    private void getSensors(View view) {
+        sensorManager = (SensorManager) view.getContext().getSystemService(SENSOR_SERVICE);
+        if (sensorManager == null) {
+            Log.w(TAG, "No sensors found!");
+            return;
+        }
+
+        sensorTemperature = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+        sensorHumidity = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
+        sensorPressure = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
     }
 
     @Override
@@ -206,5 +238,90 @@ public class SelectCityFragment extends Fragment {
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack(BACK_STACK_KEY)
                 .commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (sensorTemperature != null)
+            sensorManager.registerListener(listenerTemperature, sensorTemperature,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        if (sensorHumidity != null)
+            sensorManager.registerListener(listenerHumidity, sensorHumidity,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        if (sensorPressure != null)
+            sensorManager.registerListener(listenerPressure, sensorPressure,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (sensorTemperature != null)
+            sensorManager.unregisterListener(listenerTemperature, sensorTemperature);
+        if (sensorHumidity != null)
+            sensorManager.unregisterListener(listenerHumidity, sensorHumidity);
+        if (sensorPressure != null)
+            sensorManager.unregisterListener(listenerPressure, sensorPressure);
+    }
+
+    private SensorEventListener listenerTemperature = new SensorEventListener() {
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            updateTemperature(event.values[0]);
+        }
+    };
+
+    private void updateTemperature(float value) {
+        final String text = String.format("%s %s %s",
+                getResources().getString(R.string.temperature),
+                Math.round(value),
+                getResources().getString(R.string.celsiusDimension));
+
+        currentTemperature.setText(text);
+    }
+
+    private SensorEventListener listenerHumidity = new SensorEventListener() {
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            updateHumidity(event.values[0]);
+        }
+    };
+
+    private void updateHumidity(float value) {
+        final String text = String.format("%s %s %s",
+                getResources().getString(R.string.humidity),
+                Math.round(value),
+                getResources().getString(R.string.humidityDimension));
+
+        currentHumidity.setText(text);
+    }
+
+    private SensorEventListener listenerPressure = new SensorEventListener() {
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            updatePressure(event.values[0]);
+        }
+    };
+
+    private void updatePressure(float value) {
+        final String text = String.format("%s %s %s",
+                getResources().getString(R.string.pressure),
+                Math.round(value),
+                getResources().getString(R.string.pressureDimension));
+
+        currentPressure.setText(text);
     }
 }

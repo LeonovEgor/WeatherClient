@@ -42,6 +42,8 @@ public class WeatherDataSource implements DataSource{
             }
         };
         requestThread.start();
+
+        //TODO: По моему это не нужно!!!
         try {
             requestThread.join();
         } catch (InterruptedException e) {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">A2L1_Погода</string>
+    <string name="app_name">A2L2_Погода</string>
 
     <string name="cityStr">Город</string>
 
@@ -54,5 +54,6 @@
     <string name="SomeWrong">Что-то пошло не так!</string>
     <string name="android_advanced_course">Android Продвинутый</string>
     <string name="add_city">Add city</string>
+    <string name="CurrentsValues">Окружающие параметры</string>
 
 </resources>
