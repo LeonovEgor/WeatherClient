@@ -6,25 +6,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/CurrentsValues"/>
+        style="@style/CardMarginStyle">
+        <LinearLayout
+            android:id="@+id/basket_products_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            style="@style/CardMarginStyle">
 
-    <TextView
-        android:id="@+id/currentTemperature"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/CurrentsValues"
+                style="@style/CardTitleStyle"/>
 
-    <TextView
-        android:id="@+id/currentHumidity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/currentTemperature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/currentPressure"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/currentHumidity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/currentPressure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <ListView
         android:id="@+id/cities_list_view"

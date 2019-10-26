@@ -16,6 +16,7 @@
     <string name="temperature">Температура</string>
 
     <string name="celsiusDimension">C</string>
+    <string name="fahrenheitDimension">F</string>
 
     <string name="empty_list">Список пуст</string>
 
@@ -23,7 +24,7 @@
     <string name="about">О программе</string>
     <string name="geekbrains_university">Университет GeekBrains</string>
     <string name="student">Студент: Леонов ЕА</string>
-    <string name="fahrenheitDimension">F</string>
+
     <string name="ok">Сохранить</string>
     <string name="cancel">Отмена</string>
 
@@ -49,11 +50,16 @@
     <string name="navigation_drawer_close">Панель навигации закрыта</string>
     <string name="nav_header_title">Погода</string>
     <string name="nav_header_desc">Погода - описание</string>
-    <string name="nav_header_subtitle">GeekBrains A2 course</string>
+    <string name="nav_header_subtitle">GeekBrains A2 курс</string>
     <string name="menu_city">Город</string>
     <string name="SomeWrong">Что-то пошло не так!</string>
     <string name="android_advanced_course">Android Продвинутый</string>
-    <string name="add_city">Add city</string>
+    <string name="add_city">Добавить город</string>
     <string name="CurrentsValues">Окружающие параметры</string>
+    <string name="enterName">Введите имя</string>
+    <string name="enterEMail">Введите адрес эл. почты</string>
+    <string name="enterFeedback">Введите отзыв</string>
+    <string name="send">Отправить</string>
+    <string name="menu_feedback">Отзыв</string>
 
 </resources>

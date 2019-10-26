@@ -18,6 +18,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.Objects;
 
 import ru.leonov.a1l3_weather.Fragments.AboutFragment;
+import ru.leonov.a1l3_weather.Fragments.FeedBackFragment;
 import ru.leonov.a1l3_weather.Fragments.SelectCityFragment;
 import ru.leonov.a1l3_weather.Fragments.SettingsFragment;
 
@@ -123,6 +124,8 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = SelectCityFragment.class;
         } else if (id == R.id.nav_settings) {
             fragmentClass = SettingsFragment.class;
+        } else if (id == R.id.nav_feedback) {
+            fragmentClass = FeedBackFragment.class;
         } else if (id == R.id.nav_about) {
             fragmentClass = AboutFragment.class;
         }

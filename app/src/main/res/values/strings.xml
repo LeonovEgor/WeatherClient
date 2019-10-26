@@ -53,6 +53,12 @@
     <string name="SomeWrong">Something went wrong!</string>
     <string name="android_advanced_course">Android Advanced</string>
     <string name="add_city">Add city</string>
-    <string name="CurrentsValues">CURRENT VALUES:</string>
+    <string name="CurrentsValues">Current values</string>
+
+    <string name="enterName">Type your name here</string>
+    <string name="enterEMail">Type your e-mail here</string>
+    <string name="enterFeedback">Type your feedback here</string>
+    <string name="send">Send</string>
+    <string name="menu_feedback">Feedback</string>
 
 </resources>
