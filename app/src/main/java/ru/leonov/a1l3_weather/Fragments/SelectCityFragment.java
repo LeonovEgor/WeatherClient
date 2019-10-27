@@ -33,6 +33,7 @@ import java.util.Objects;
 
 import ru.leonov.a1l3_weather.Data.CityHelper;
 import ru.leonov.a1l3_weather.R;
+import ru.leonov.a1l3_weather.SensorsView.SensorView;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -46,9 +47,9 @@ public class SelectCityFragment extends Fragment {
 
     private int currentPosition = 0;    // Текущая позиция (выбранный город)
 
-    private TextView currentTemperature;
-    private TextView currentHumidity;
-    private TextView currentPressure;
+    private SensorView currentTemperature;
+    private SensorView currentHumidity;
+    private SensorView currentPressure;
     private ListView listView;
     private TextView emptyTextView;
     private ArrayAdapter<String> adapter;
@@ -272,17 +273,15 @@ public class SelectCityFragment extends Fragment {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            updateTemperature(event.values[0]);
+            int percent = Math.round(100f/373f*(event.values[0]+273f));
+            update(currentTemperature, event.values[0], percent);
         }
     };
 
-    private void updateTemperature(float value) {
-        final String text = String.format("%s %s %s",
-                getResources().getString(R.string.temperature),
-                Math.round(value),
-                getResources().getString(R.string.celsiusDimension));
-
-        currentTemperature.setText(text);
+    private void update(SensorView view, float value, int percent) {
+        int iValue = Math.round(value);
+        view.setParamValue(String.valueOf(iValue));
+        view.setProgressPercent(percent);
     }
 
     private SensorEventListener listenerHumidity = new SensorEventListener() {
@@ -292,18 +291,10 @@ public class SelectCityFragment extends Fragment {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            updateHumidity(event.values[0]);
+            int percent = Math.round(event.values[0]);
+            update(currentHumidity, event.values[0], percent);
         }
     };
-
-    private void updateHumidity(float value) {
-        final String text = String.format("%s %s %s",
-                getResources().getString(R.string.humidity),
-                Math.round(value),
-                getResources().getString(R.string.humidityDimension));
-
-        currentHumidity.setText(text);
-    }
 
     private SensorEventListener listenerPressure = new SensorEventListener() {
 
@@ -312,16 +303,8 @@ public class SelectCityFragment extends Fragment {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            updatePressure(event.values[0]);
+            int percent = Math.round(100f/1100f*event.values[0]);
+            update(currentPressure, event.values[0], percent);
         }
     };
-
-    private void updatePressure(float value) {
-        final String text = String.format("%s %s %s",
-                getResources().getString(R.string.pressure),
-                Math.round(value),
-                getResources().getString(R.string.pressureDimension));
-
-        currentPressure.setText(text);
-    }
 }

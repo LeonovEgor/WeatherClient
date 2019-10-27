@@ -2,6 +2,7 @@
 <!-- макет списка -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -23,20 +24,36 @@
                 android:text="@string/CurrentsValues"
                 style="@style/CardTitleStyle"/>
 
-            <TextView
+            <ru.leonov.a1l3_weather.SensorsView.SensorView
                 android:id="@+id/currentTemperature"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:paramName="@string/temperature"
+                app:paramDimension="@string/celsiusDimension"
+                app:textColor="@color/primaryText"
+                app:textDimension="14sp"
+                style="@style/Margin"/>
 
-            <TextView
+            <ru.leonov.a1l3_weather.SensorsView.SensorView
                 android:id="@+id/currentHumidity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:paramName="@string/humidity"
+                app:paramDimension="@string/humidityDimension"
+                app:textColor="@color/primaryText"
+                app:textDimension="14sp"
+                style="@style/Margin"/>
 
-            <TextView
+            <ru.leonov.a1l3_weather.SensorsView.SensorView
                 android:id="@+id/currentPressure"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:paramName="@string/pressure"
+                app:paramDimension="@string/pressureDimension"
+                app:textColor="@color/primaryText"
+                app:textDimension="14sp"
+                style="@style/Margin"/>
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

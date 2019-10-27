@@ -1,0 +1,11 @@
+<resources>
+    <declare-styleable name="SensorView">
+        <attr name="paramName" format="string" />
+        <attr name="paramValue" format="string" />
+        <attr name="paramDimension" format="string" />
+        <attr name="progressPercent" format="integer" />
+        <attr name="textDimension" format="dimension" />
+        <attr name="textColor" format="color" />
+        <attr name="Drawable" format="color|reference" />
+    </declare-styleable>
+</resources>
