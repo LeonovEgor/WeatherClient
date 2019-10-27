@@ -33,6 +33,7 @@ import java.util.Objects;
 
 import ru.leonov.a1l3_weather.Data.CityHelper;
 import ru.leonov.a1l3_weather.R;
+import ru.leonov.a1l3_weather.SensorsView.SensorHelper;
 import ru.leonov.a1l3_weather.SensorsView.SensorView;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -273,7 +274,9 @@ public class SelectCityFragment extends Fragment {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            int percent = Math.round(100f/373f*(event.values[0]+273f));
+            int percent = Math.round(
+                    100f/SensorHelper.temperatureScale
+                            *(event.values[0]+SensorHelper.temperatureScaleMinus));
             update(currentTemperature, event.values[0], percent);
         }
     };
@@ -303,7 +306,7 @@ public class SelectCityFragment extends Fragment {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            int percent = Math.round(100f/1100f*event.values[0]);
+            int percent = Math.round(100f/ SensorHelper.pressureScale*event.values[0]);
             update(currentPressure, event.values[0], percent);
         }
     };
