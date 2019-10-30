@@ -3,6 +3,8 @@ package ru.leonov.a1l3_weather.Data;
 import android.content.res.Resources;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,38 +26,18 @@ public class WeatherDataSource implements DataSource{
     }
 
     @Override
-    public void requestDataSource(String city, ResponseCallback callback) {
-        updateWeatherData(city, callback);
+    public ArrayList<WeatherData> requestDataSource(String city) {
+        JSONObject json = WeatherDataLoader.getJSONData(city);
+        return renderWeather(json);
     }
 
-    private void updateWeatherData(final String city, final ResponseCallback callback) {
-
-        Thread requestThread = new Thread() {
-            @Override
-            public void run() {
-                final JSONObject jsonObject = WeatherDataLoader.getJSONData(city);
-                if(jsonObject != null) {
-                    final ArrayList<WeatherData> data = renderWeather(jsonObject);
-                    callback.response(data);
-                }
-                else callback.response(null);
-            }
-        };
-        requestThread.start();
-
-        //TODO: По моему это не нужно!!!
-        try {
-            requestThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private ArrayList<WeatherData> renderWeather(JSONObject jsonObject) {
-        Log.d(LOG_TAG, "json: " + jsonObject.toString());
+    private ArrayList<WeatherData> renderWeather(@Nullable JSONObject jsonObject) {
         ArrayList<WeatherData> list = new ArrayList<>();
 
         try {
+            if (jsonObject == null) throw new Exception("Вернулся пустой запрос");
+            Log.d(LOG_TAG, "json: " + jsonObject.toString());
+
             JSONObject details = jsonObject.getJSONArray("weather").getJSONObject(0);
             JSONObject main = jsonObject.getJSONObject("main");
             JSONObject wind = jsonObject.getJSONObject("wind");
@@ -75,6 +57,9 @@ public class WeatherDataSource implements DataSource{
             list.add(new WeatherData(city, pressure,
                     humidity, windSpeed, temperature, weatherIcon, date));
         } catch (Exception exc) {
+            Log.e(LOG_TAG,
+                    "One or more fields not found in the JSON data. " + exc.getMessage());
+
             list.add(new WeatherData(
                     resources.getString(R.string.error),
                     resources.getString(R.string.error),
@@ -84,7 +69,6 @@ public class WeatherDataSource implements DataSource{
                     resources.getString(R.string.error),
                     resources.getString(R.string.error)));
             exc.printStackTrace();
-            Log.e(LOG_TAG, "One or more fields not found in the JSON data");
         }
         return list;
     }

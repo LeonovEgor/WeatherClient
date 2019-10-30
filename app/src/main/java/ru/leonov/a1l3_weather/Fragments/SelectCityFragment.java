@@ -6,7 +6,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,7 +26,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import java.util.List;
 import java.util.Objects;
 
 import ru.leonov.a1l3_weather.Data.CityHelper;
@@ -43,8 +40,6 @@ public class SelectCityFragment extends Fragment {
     private static final String TAG = "WEATHER";
     private static final String CITY_VALUE_KEY = "cityKey";
     private static final String BACK_STACK_KEY = "backStackKey";
-
-    private final Handler handler = new Handler();
 
     private int currentPosition = 0;    // Текущая позиция (выбранный город)
 
@@ -245,6 +240,11 @@ public class SelectCityFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        registerSensors();
+    }
+
+    private void registerSensors() {
         if (sensorTemperature != null)
             sensorManager.registerListener(listenerTemperature, sensorTemperature,
                     SensorManager.SENSOR_DELAY_NORMAL);
@@ -258,7 +258,12 @@ public class SelectCityFragment extends Fragment {
 
     @Override
     public void onPause() {
+        unregisterSensors();
+
         super.onPause();
+    }
+
+    private void unregisterSensors() {
         if (sensorTemperature != null)
             sensorManager.unregisterListener(listenerTemperature, sensorTemperature);
         if (sensorHumidity != null)

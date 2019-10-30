@@ -1,6 +1,8 @@
 package ru.leonov.a1l3_weather.Data;
 
-public class WeatherData {
+import java.io.Serializable;
+
+public class WeatherData implements Serializable {
     public String city;
     public String pressure;
     public String humidity;
