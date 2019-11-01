@@ -35,7 +35,6 @@ public class WeatherDetailFragment extends Fragment {
     private ServiceFinishedReceiver receiver = new ServiceFinishedReceiver();
 
     private RecyclerView recyclerView;
-    private final Handler handler = new Handler();
 
     static WeatherDetailFragment create(String city) {
         WeatherDetailFragment fragment = new WeatherDetailFragment();
@@ -124,6 +123,7 @@ public class WeatherDetailFragment extends Fragment {
         Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
     }
 
+    @SuppressWarnings("unchecked")
     private class ServiceFinishedReceiver extends BroadcastReceiver {
 
         @Override

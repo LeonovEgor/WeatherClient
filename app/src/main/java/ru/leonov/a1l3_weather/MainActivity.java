@@ -1,5 +1,6 @@
 package ru.leonov.a1l3_weather;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import ru.leonov.a1l3_weather.Fragments.AboutFragment;
 import ru.leonov.a1l3_weather.Fragments.FeedBackFragment;
 import ru.leonov.a1l3_weather.Fragments.SelectCityFragment;
 import ru.leonov.a1l3_weather.Fragments.SettingsFragment;
+import ru.leonov.a1l3_weather.Storages.Settings;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,9 +39,14 @@ public class MainActivity extends AppCompatActivity
         showMessage(this.getClass().getName() + " - onCreate()");
         setContentView(R.layout.activity_main);
 
+        loadSettings();
         initToolBar();
         initSideMenu();
         showSelectCityFragment();
+    }
+
+    private void loadSettings() {
+
     }
 
     private void initToolBar() {
@@ -172,6 +179,12 @@ public class MainActivity extends AppCompatActivity
     protected void onSaveInstanceState(Bundle saveInstanceState){
         super.onSaveInstanceState(saveInstanceState);
         showMessage(this.getClass().getName() + " - onSaveInstanceState()");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 
     private void showMessage(String message) {
