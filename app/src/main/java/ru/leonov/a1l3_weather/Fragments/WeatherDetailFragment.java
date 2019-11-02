@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,11 @@ public class WeatherDetailFragment extends Fragment {
     private ServiceFinishedReceiver receiver = new ServiceFinishedReceiver();
 
     private RecyclerView recyclerView;
+<<<<<<< HEAD
+=======
+    private TextView listEmptyView;
+    private final Handler handler = new Handler();
+>>>>>>> Thread
 
     static WeatherDetailFragment create(String city) {
         WeatherDetailFragment fragment = new WeatherDetailFragment();
@@ -79,6 +85,7 @@ public class WeatherDetailFragment extends Fragment {
     }
 
     private void initViews(View view) {
+        listEmptyView = view.findViewById(R.id.list_empty_view);
         recyclerView = view.findViewById(R.id.recyclerView);
     }
 
@@ -128,7 +135,7 @@ public class WeatherDetailFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            //TODO: А как тут правильно сделать???
             final ArrayList<WeatherData> response =
                     (ArrayList<WeatherData>) intent.getSerializableExtra(RequestService.WEATHER_KEY);
 
@@ -141,7 +148,7 @@ public class WeatherDetailFragment extends Fragment {
                                 Toast.LENGTH_LONG).show();
                         return;
                     }
-
+                    listEmptyView.setVisibility(View.GONE);
                     RecyclerViewAdapter adapter = new RecyclerViewAdapter(response);
                     recyclerView.setAdapter(adapter);
                 }
