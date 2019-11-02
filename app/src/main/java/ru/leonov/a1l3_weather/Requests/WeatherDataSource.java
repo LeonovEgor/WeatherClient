@@ -1,4 +1,4 @@
-package ru.leonov.a1l3_weather.Data;
+package ru.leonov.a1l3_weather.Requests;
 
 import android.content.res.Resources;
 import android.util.Log;
@@ -13,9 +13,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import ru.leonov.a1l3_weather.Data.WeatherData;
 import ru.leonov.a1l3_weather.R;
 
-public class WeatherDataSource implements DataSource{
+public class WeatherDataSource implements DataSource {
+    private static final String RESPONSE = "cod";
+    private static final int ALL_GOOD = 200;
+
 
     private final static String LOG_TAG = WeatherDataSource.class.getSimpleName();
 
@@ -26,9 +30,30 @@ public class WeatherDataSource implements DataSource{
     }
 
     @Override
-    public ArrayList<WeatherData> requestDataSource(String city) {
-        JSONObject json = WeatherDataLoader.getJSONData(city);
-        return renderWeather(json);
+    public void requestDataSource(String city, ResponseCallback callback) {
+        updateWeatherData(city, callback);
+    }
+
+    private void updateWeatherData(final String city, final ResponseCallback callback) {
+        OkHttpRequester requester = new OkHttpRequester(new OkHttpRequester.OnResponseCompleted() {
+            @Override
+            public void onCompleted(String content) {
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(content);
+                    if(jsonObject.getInt(RESPONSE) != ALL_GOOD) {
+                        callback.response(null);
+                    } else {
+                        final ArrayList<WeatherData> data = renderWeather(jsonObject);
+                        callback.response(data);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        // Запустить запрос
+        requester.run(city); // загрузим нашу страницу
     }
 
     private ArrayList<WeatherData> renderWeather(@Nullable JSONObject jsonObject) {

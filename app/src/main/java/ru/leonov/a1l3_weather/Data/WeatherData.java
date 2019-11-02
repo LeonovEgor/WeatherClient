@@ -11,8 +11,8 @@ public class WeatherData implements Serializable {
     public String weatherIcon;
     public String updateDate;
 
-    WeatherData(String city, String pressure, String humidity, String windSpeed, String temperature,
-                String weatherIcon, String updateDate) {
+    public WeatherData(String city, String pressure, String humidity, String windSpeed, String temperature,
+                       String weatherIcon, String updateDate) {
         this.city = city;
         this.pressure = pressure;
         this.humidity = humidity;
