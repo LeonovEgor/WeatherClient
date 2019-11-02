@@ -36,11 +36,7 @@ public class WeatherDetailFragment extends Fragment {
     private ServiceFinishedReceiver receiver = new ServiceFinishedReceiver();
 
     private RecyclerView recyclerView;
-<<<<<<< HEAD
-=======
     private TextView listEmptyView;
-    private final Handler handler = new Handler();
->>>>>>> Thread
 
     static WeatherDetailFragment create(String city) {
         WeatherDetailFragment fragment = new WeatherDetailFragment();
@@ -135,7 +131,6 @@ public class WeatherDetailFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            //TODO: А как тут правильно сделать???
             final ArrayList<WeatherData> response =
                     (ArrayList<WeatherData>) intent.getSerializableExtra(RequestService.WEATHER_KEY);
 
