@@ -14,5 +14,5 @@ public class Settings implements Serializable {
     public boolean showHumidity;
     public boolean showWindSpeed;
     public boolean isCelsius;
-    String cities;
+    public String cities;
 }

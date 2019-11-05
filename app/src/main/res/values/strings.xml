@@ -60,5 +60,6 @@
     <string name="enterFeedback">Type your feedback here</string>
     <string name="send">Send</string>
     <string name="menu_feedback">Feedback</string>
+    <string name="Moscow">Moscow</string>
 
 </resources>

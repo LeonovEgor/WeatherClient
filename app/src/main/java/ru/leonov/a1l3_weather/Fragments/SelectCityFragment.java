@@ -1,6 +1,7 @@
 package ru.leonov.a1l3_weather.Fragments;
 
 import android.content.DialogInterface;
+import android.database.DataSetObserver;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,12 +27,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-import ru.leonov.a1l3_weather.Data.CityHelper;
 import ru.leonov.a1l3_weather.R;
 import ru.leonov.a1l3_weather.SensorsView.SensorHelper;
 import ru.leonov.a1l3_weather.SensorsView.SensorView;
+import ru.leonov.a1l3_weather.Storages.Settings;
+import ru.leonov.a1l3_weather.Storages.SettingsHelper;
+import ru.leonov.a1l3_weather.Storages.Storage;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -83,14 +88,32 @@ public class SelectCityFragment extends Fragment {
     }
 
     private void initList() {
+        final Settings settings = Storage.loadSettings(Objects.requireNonNull(getActivity()));
+        List<String> citiesList = SettingsHelper.getCityListFromString(settings.cities);
+        // Если это первый запуск и список пустой, добавим город Москва.
+        if (citiesList.size() == 1 && citiesList.get(0).equals("")) {
+            citiesList.set(0, getActivity().getString(R.string.Moscow));
+        }
         adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),
-                android.R.layout.simple_list_item_activated_1);
+                android.R.layout.simple_list_item_activated_1,
+                citiesList);
 
         listView.setAdapter(adapter);
         listView.setEmptyView(emptyTextView);
         registerForContextMenu(listView);
 
-        adapter.addAll(CityHelper.getCityList());
+        adapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                List<String> citiesList = new ArrayList<>();
+                for(int i=0; i < adapter.getCount(); i++) {
+                    citiesList.add(adapter.getItem(i));
+                }
+                settings.cities = SettingsHelper.getCitesStringFromList(citiesList);
+                Storage.saveSettings(Objects.requireNonNull(getActivity()), settings);
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
