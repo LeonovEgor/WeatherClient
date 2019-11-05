@@ -51,6 +51,11 @@ public class WeatherDataSource implements DataSource {
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onError(String error) {
+                callback.responseError(error);
+            }
         });
         // Запустить запрос
         requester.run(city); // загрузим нашу страницу

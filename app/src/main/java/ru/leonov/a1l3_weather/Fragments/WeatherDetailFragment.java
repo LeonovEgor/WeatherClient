@@ -30,8 +30,6 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
     private static final String TAG = "WEATHER";
     private static final String CITY_VALUE_KEY = "CITY";
 
-//    private ServiceFinishedReceiver receiver = new ServiceFinishedReceiver();
-
     private RecyclerView recyclerView;
     private TextView listEmptyView;
 
@@ -72,9 +70,6 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
 
         initViews(view);
         initRecyclerView();
-
-        //startService();
-        //registerService();
     }
 
     private void initViews(View view) {
@@ -108,4 +103,11 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(response);
         recyclerView.setAdapter(adapter);
     }
+
+    @Override
+    public void responseError(String error) {
+        listEmptyView.setText(error);
+    }
+
+
 }

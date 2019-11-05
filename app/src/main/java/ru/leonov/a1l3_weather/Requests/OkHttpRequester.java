@@ -61,15 +61,27 @@ class OkHttpRequester {
                     });
                 } else {
                     Log.e(TAG, "Запрос вернул ошибку: " + response.code());
-                    //TODO: заменить на onError
-                    listener.onCompleted(String.valueOf(response.code()));
+                    final String err = String.valueOf(response.code());
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.onError(err);
+                        }
+                    });
                 }
             }
 
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e(TAG, "Существенные проблемы связи: " + e.getMessage());
-                //TODO: заменить на onError
-                listener.onCompleted(e.getMessage());
+
+                final String err = e.getMessage();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.onError(String.valueOf(err));
+                    }
+                });
             }
         });
     }
@@ -77,6 +89,6 @@ class OkHttpRequester {
     // интерфейс обратного вызова, метод onCompleted вызывается по окончании загрузки страницы
     public interface OnResponseCompleted {
         void onCompleted(String content);
-        //void onError(String error);
+        void onError(String error);
     }
 }
