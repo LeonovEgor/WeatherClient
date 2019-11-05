@@ -1,16 +1,12 @@
 package ru.leonov.a1l3_weather.Fragments;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,18 +19,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import ru.leonov.a1l3_weather.Requests.DataSource;
+import ru.leonov.a1l3_weather.Requests.ResponseCallback;
 import ru.leonov.a1l3_weather.Data.WeatherData;
+import ru.leonov.a1l3_weather.Requests.WeatherDataSource;
 import ru.leonov.a1l3_weather.R;
-import ru.leonov.a1l3_weather.Requests.RequestService;
 
-public class WeatherDetailFragment extends Fragment {
+public class WeatherDetailFragment extends Fragment implements ResponseCallback {
 
     private static final String TAG = "WEATHER";
     private static final String CITY_VALUE_KEY = "CITY";
 
-    private ServiceFinishedReceiver receiver = new ServiceFinishedReceiver();
+//    private ServiceFinishedReceiver receiver = new ServiceFinishedReceiver();
 
     private RecyclerView recyclerView;
+    private TextView listEmptyView;
 
     static WeatherDetailFragment create(String city) {
         WeatherDetailFragment fragment = new WeatherDetailFragment();
@@ -74,11 +73,12 @@ public class WeatherDetailFragment extends Fragment {
         initViews(view);
         initRecyclerView();
 
-        startService();
-        registerService();
+        //startService();
+        //registerService();
     }
 
     private void initViews(View view) {
+        listEmptyView = view.findViewById(R.id.list_empty_view);
         recyclerView = view.findViewById(R.id.recyclerView);
     }
 
@@ -89,63 +89,23 @@ public class WeatherDetailFragment extends Fragment {
             return;
         }
 
-//        DataSource source = new WeatherDataSource(getResources());
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity.getBaseContext());
         recyclerView.setLayoutManager(layoutManager);
-//        source.requestDataSource(getCity(),this);
-    }
 
-    private void startService() {
-        FragmentActivity activity = getActivity();
-        if (activity == null) {
-            Log.d(TAG, "startService - Activity is detached");
-            return;
-        }
-
-        Intent intent = new Intent(activity.getApplicationContext(), RequestService.class);
-        intent.putExtra(RequestService.CITY, getCity());
-        getActivity().startService(intent);
-
-    }
-    private void registerService() {
-        Objects.requireNonNull(getActivity()).registerReceiver(receiver,
-                new IntentFilter(RequestService.ACTION_REQUEST_SERVICE));
+        DataSource source = new WeatherDataSource(getResources());
+        source.requestDataSource(getCity(),this);
     }
 
     @Override
-    public void onPause() {
-        unregisterService();
-
-        super.onPause();
-    }
-
-    private void unregisterService() {
-        Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
-    }
-
-    @SuppressWarnings("unchecked")
-    private class ServiceFinishedReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            final ArrayList<WeatherData> response =
-                    (ArrayList<WeatherData>) intent.getSerializableExtra(RequestService.WEATHER_KEY);
-
-            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if(response == null) {
-                        Toast.makeText(Objects.requireNonNull(getActivity()).getBaseContext(),
-                                R.string.place_not_found,
-                                Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    RecyclerViewAdapter adapter = new RecyclerViewAdapter(response);
-                    recyclerView.setAdapter(adapter);
-                }
-            });
+    public void response(ArrayList<WeatherData> response) {
+        if(response == null) {
+            Toast.makeText(Objects.requireNonNull(getActivity()).getBaseContext(),
+                    R.string.place_not_found,
+                    Toast.LENGTH_LONG).show();
+            return;
         }
+        listEmptyView.setVisibility(View.GONE);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(response);
+        recyclerView.setAdapter(adapter);
     }
 }

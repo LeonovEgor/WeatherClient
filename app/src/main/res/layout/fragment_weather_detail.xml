@@ -7,10 +7,18 @@
     android:orientation="vertical"
     tools:context=".Fragments.WeatherDetailFragment">
 
+    <TextView
+        android:id="@+id/list_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/pleaseWait"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
 
 
 </LinearLayout>
