@@ -24,7 +24,7 @@ class OkHttpRequester {
             "https://api.openweathermap.org/data/2.5/weather?q=%s&units=metric";
     private static final String KEY = "x-api-key";
 
-    private OnResponseCompleted listener;
+    private final OnResponseCompleted listener;
 
     OkHttpRequester(OnResponseCompleted listener) {
         this.listener = listener;
@@ -36,7 +36,7 @@ class OkHttpRequester {
             url = new URL(String.format(OPEN_WEATHER_API_URL, city));
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            //TODO: call onError();
+            listener.onError(e.getMessage());
             return;
         }
 

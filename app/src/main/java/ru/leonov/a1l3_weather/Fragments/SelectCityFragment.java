@@ -40,12 +40,12 @@ import ru.leonov.a1l3_weather.Storages.Storage;
 
 import static android.content.Context.SENSOR_SERVICE;
 
-
 public class SelectCityFragment extends Fragment {
     private static final String TAG = "WEATHER";
     private static final String CITY_VALUE_KEY = "cityKey";
     private static final String BACK_STACK_KEY = "backStackKey";
 
+    private Settings settings;
     private int currentPosition = 0;    // Текущая позиция (выбранный город)
 
     private SensorView currentTemperature;
@@ -75,6 +75,7 @@ public class SelectCityFragment extends Fragment {
         Log.d(TAG, this.getClass().getName() + " - onViewCreated");
 
         initViews(view);
+        loadSettings();
         initList();
         getSensors(view);
     }
@@ -87,12 +88,15 @@ public class SelectCityFragment extends Fragment {
         emptyTextView = view.findViewById(R.id.cities_list_empty_view);
     }
 
+    private void loadSettings() {
+        settings = Storage.loadSettings(Objects.requireNonNull(getActivity()));
+    }
+
     private void initList() {
-        final Settings settings = Storage.loadSettings(Objects.requireNonNull(getActivity()));
         List<String> citiesList = SettingsHelper.getCityListFromString(settings.cities);
         // Если это первый запуск и список пустой, добавим город Москва.
         if (citiesList.size() == 1 && citiesList.get(0).equals("")) {
-            citiesList.set(0, getActivity().getString(R.string.Moscow));
+            citiesList.set(0, Objects.requireNonNull(getActivity()).getString(R.string.Moscow));
         }
         adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),
                 android.R.layout.simple_list_item_activated_1,
@@ -244,7 +248,7 @@ public class SelectCityFragment extends Fragment {
     private void showWeatherDetail() {
         listView.setItemChecked(currentPosition, true);
         String city = (String) listView.getAdapter().getItem(currentPosition);
-        WeatherDetailFragment detail = WeatherDetailFragment.create(city);
+        WeatherDetailFragment detail = WeatherDetailFragment.create(city, settings);
 
         FragmentManager manager = getFragmentManager();
         if (manager == null) {
@@ -295,7 +299,7 @@ public class SelectCityFragment extends Fragment {
             sensorManager.unregisterListener(listenerPressure, sensorPressure);
     }
 
-    private SensorEventListener listenerTemperature = new SensorEventListener() {
+    private final SensorEventListener listenerTemperature = new SensorEventListener() {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {}
@@ -315,7 +319,7 @@ public class SelectCityFragment extends Fragment {
         view.setProgressPercent(percent);
     }
 
-    private SensorEventListener listenerHumidity = new SensorEventListener() {
+    private final SensorEventListener listenerHumidity = new SensorEventListener() {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {}
@@ -327,7 +331,7 @@ public class SelectCityFragment extends Fragment {
         }
     };
 
-    private SensorEventListener listenerPressure = new SensorEventListener() {
+    private final SensorEventListener listenerPressure = new SensorEventListener() {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {}

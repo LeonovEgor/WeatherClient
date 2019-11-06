@@ -12,5 +12,4 @@ public class SettingsHelper {
     public static String getCitesStringFromList(List<String> list) {
         return android.text.TextUtils.join(",", list);
     }
-
 }

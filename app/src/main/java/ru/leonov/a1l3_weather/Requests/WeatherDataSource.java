@@ -23,14 +23,16 @@ public class WeatherDataSource implements DataSource {
 
     private final static String LOG_TAG = WeatherDataSource.class.getSimpleName();
 
-    private Resources resources;
+    private final Resources resources;
+    private boolean isCelsius;
 
     public WeatherDataSource(Resources res) {
         this.resources = res;
     }
 
     @Override
-    public void requestDataSource(String city, ResponseCallback callback) {
+    public void requestDataSource(String city, boolean isCelsius, ResponseCallback callback) {
+        this.isCelsius = isCelsius;
         updateWeatherData(city, callback);
     }
 
@@ -41,11 +43,13 @@ public class WeatherDataSource implements DataSource {
                 JSONObject jsonObject;
                 try {
                     jsonObject = new JSONObject(content);
-                    if(jsonObject.getInt(RESPONSE) != ALL_GOOD) {
-                        callback.response(null);
+                    int code = jsonObject.getInt(RESPONSE);
+                    if(code != ALL_GOOD) {
+                        callback.responseError(String.valueOf(code));
                     } else {
                         final ArrayList<WeatherData> data = renderWeather(jsonObject);
-                        callback.response(data);
+                        if (data == null) callback.responseError("JSON parsing error");
+                        else callback.response(data);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -57,8 +61,7 @@ public class WeatherDataSource implements DataSource {
                 callback.responseError(error);
             }
         });
-        // Запустить запрос
-        requester.run(city); // загрузим нашу страницу
+        requester.run(city);
     }
 
     private ArrayList<WeatherData> renderWeather(@Nullable JSONObject jsonObject) {
@@ -89,16 +92,8 @@ public class WeatherDataSource implements DataSource {
         } catch (Exception exc) {
             Log.e(LOG_TAG,
                     "One or more fields not found in the JSON data. " + exc.getMessage());
-
-            list.add(new WeatherData(
-                    resources.getString(R.string.error),
-                    resources.getString(R.string.error),
-                    resources.getString(R.string.error),
-                    resources.getString(R.string.error),
-                    resources.getString(R.string.error),
-                    resources.getString(R.string.error),
-                    resources.getString(R.string.error)));
             exc.printStackTrace();
+            list = null;
         }
         return list;
     }
@@ -116,7 +111,9 @@ public class WeatherDataSource implements DataSource {
         return String.format(Locale.getDefault(), "%s: %.0f %s",
                 resources.getString(R.string.temperature),
                         Math.ceil(main.getDouble("temp")),
-                        resources.getString(R.string.celsiusDimension));
+                        isCelsius?
+                                resources.getString(R.string.celsiusDimension):
+                                resources.getString(R.string.fahrenheitDimension));
     }
 
     private String WindSpeed(JSONObject wind) throws JSONException {
@@ -139,8 +136,7 @@ public class WeatherDataSource implements DataSource {
         if(actualId == 800) {
             long currentTime = new Date().getTime();
             if(currentTime >= sunrise && currentTime < sunset) {
-                icon = "\u2600";
-                //icon = getString(R.string.weather_sunny);
+                icon = resources.getString(R.string.weather_sunny);
             } else {
                 icon = resources.getString(R.string.weather_clear_night);
             }
@@ -167,8 +163,7 @@ public class WeatherDataSource implements DataSource {
                     break;
                 }
                 case 8: {
-                    icon = "\u2601";
-                    // icon = getString(R.string.weather_cloudy);
+                    icon = resources.getString(R.string.weather_cloudy);
                     break;
                 }
             }

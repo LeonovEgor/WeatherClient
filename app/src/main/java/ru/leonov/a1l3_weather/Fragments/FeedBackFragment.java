@@ -1,7 +1,6 @@
 package ru.leonov.a1l3_weather.Fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,10 +16,6 @@ public class FeedBackFragment extends Fragment {
 
     public FeedBackFragment() {
         // Required empty public constructor
-    }
-
-    public static FeedBackFragment newInstance() {
-        return new FeedBackFragment();
     }
 
     @Override
@@ -39,8 +34,4 @@ public class FeedBackFragment extends Fragment {
         super.onAttach(context);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
 }

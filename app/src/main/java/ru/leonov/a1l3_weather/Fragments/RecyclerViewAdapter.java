@@ -15,14 +15,17 @@ import java.util.List;
 
 import ru.leonov.a1l3_weather.Data.WeatherData;
 import ru.leonov.a1l3_weather.R;
+import ru.leonov.a1l3_weather.Storages.Settings;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private List<WeatherData> dataSource = new ArrayList<>();
+    private final Settings settings;
 
-    RecyclerViewAdapter(List<WeatherData> dataSource) {
+    RecyclerViewAdapter(List<WeatherData> dataSource, Settings settings) {
         if(dataSource != null) {
             this.dataSource = dataSource;
         }
+        this.settings = settings;
     }
 
     @NonNull
@@ -37,12 +40,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.tvCity.setText(dataSource.get(position).city);
-        holder.tvPressure.setText(dataSource.get(position).pressure);
-        holder.tvHumidity.setText(dataSource.get(position).humidity);
-        holder.tvWindSpeed.setText(dataSource.get(position).windSpeed);
-        holder.tvTemperature.setText(dataSource.get(position).temperature);
+        if (settings.showPressure) {
+            holder.tvPressure.setText(dataSource.get(position).pressure);
+        }
+        else {
+            holder.tvPressure.setVisibility(View.GONE);
+        }
+
+        if (settings.showHumidity) {
+            holder.tvHumidity.setText(dataSource.get(position).humidity);
+        }
+        else {
+            holder.tvHumidity.setVisibility(View.GONE);
+        }
+
+        if (settings.showWindSpeed) {
+            holder.tvWindSpeed.setText(dataSource.get(position).windSpeed);
+        }
+        else {
+            holder.tvWindSpeed.setVisibility(View.GONE);
+        }
+
         holder.tvWeatherIcon.setText(dataSource.get(position).weatherIcon);
         holder.tvDateUpdate.setText(dataSource.get(position).updateDate);
+        holder.tvTemperature.setText(dataSource.get(position).temperature);
     }
 
     @Override
@@ -82,6 +103,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     "fonts/weather.ttf");
             tvWeatherIcon.setTypeface(weatherFont);
         }
-
     }
 }
