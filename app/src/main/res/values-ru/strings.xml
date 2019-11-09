@@ -8,7 +8,7 @@
     <string name="humidityDimension">%</string>
 
     <string name="pressure">Давление</string>
-    <string name="pressureDimension">мм рт.ст.</string>
+    <string name="pressureDimension">гПа</string>
 
     <string name="windSpeed">Скорость ветра</string>
     <string name="windSpeedDimension">м/с</string>
@@ -18,7 +18,7 @@
     <string name="celsiusDimension">C</string>
     <string name="fahrenheitDimension">F</string>
 
-    <string name="empty_list">Список пуст</string>
+    <string name="empty_list">Добавьте новый город</string>
 
     <string name="action_settings">Установки</string>
     <string name="about">О программе</string>

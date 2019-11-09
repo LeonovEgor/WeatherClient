@@ -27,6 +27,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,6 +56,7 @@ public class SelectCityFragment extends Fragment {
     private ListView listView;
     private TextView emptyTextView;
     private ArrayAdapter<String> adapter;
+    private FloatingActionButton fab;
 
     private SensorManager sensorManager;
     private Sensor sensorTemperature;
@@ -77,6 +80,7 @@ public class SelectCityFragment extends Fragment {
         initViews(view);
         loadSettings();
         initList();
+        initFloatingBtn();
         getSensors(view);
     }
 
@@ -94,10 +98,6 @@ public class SelectCityFragment extends Fragment {
 
     private void initList() {
         List<String> citiesList = SettingsHelper.getCityListFromString(settings.cities);
-        // Если это первый запуск и список пустой, добавим город Москва.
-        if (citiesList.size() == 1 && citiesList.get(0).equals("")) {
-            citiesList.set(0, Objects.requireNonNull(getActivity()).getString(R.string.Moscow));
-        }
         adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),
                 android.R.layout.simple_list_item_activated_1,
                 citiesList);
@@ -126,6 +126,17 @@ public class SelectCityFragment extends Fragment {
                 currentPosition = position;
                 showWeatherDetail();
             }
+        });
+    }
+
+    private void initFloatingBtn() {
+        fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
+        fab.show();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addItem();
+            };
         });
     }
 
@@ -286,7 +297,7 @@ public class SelectCityFragment extends Fragment {
     @Override
     public void onPause() {
         unregisterSensors();
-
+        fab.hide();
         super.onPause();
     }
 

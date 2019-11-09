@@ -1,27 +1,25 @@
 package ru.leonov.a1l3_weather.Requests;
 
+import android.annotation.SuppressLint;
 import android.content.res.Resources;
-import android.util.Log;
 
-import androidx.annotation.Nullable;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import androidx.annotation.NonNull;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import ru.leonov.a1l3_weather.Data.WeatherData;
 import ru.leonov.a1l3_weather.R;
+import ru.leonov.a1l3_weather.Requests.Model.WeatherRequestRestModel;
 
 public class WeatherDataSource implements DataSource {
-    private static final String RESPONSE = "cod";
-    private static final int ALL_GOOD = 200;
-
-
-    private final static String LOG_TAG = WeatherDataSource.class.getSimpleName();
+    private static final String OPEN_WEATHER_API_KEY = "1eb209182666b630fb58efb30a93cb00";
+    private static final String UNITS = "metric"; //TODO: Вывести в настройки и оттуда выбирать единицы изменения
 
     private final Resources resources;
     private boolean isCelsius;
@@ -37,96 +35,74 @@ public class WeatherDataSource implements DataSource {
     }
 
     private void updateWeatherData(final String city, final ResponseCallback callback) {
-        OkHttpRequester requester = new OkHttpRequester(new OkHttpRequester.OnResponseCompleted() {
-            @Override
-            public void onCompleted(String content) {
-                JSONObject jsonObject;
-                try {
-                    jsonObject = new JSONObject(content);
-                    int code = jsonObject.getInt(RESPONSE);
-                    if(code != ALL_GOOD) {
-                        callback.responseError(String.valueOf(code));
-                    } else {
-                        final ArrayList<WeatherData> data = renderWeather(jsonObject);
-                        if (data == null) callback.responseError("JSON parsing error");
-                        else callback.response(data);
+        OpenWeatherRepo.getInstance().getAdapter().loadWeather(city,
+                OPEN_WEATHER_API_KEY, UNITS)
+                .enqueue(new Callback<WeatherRequestRestModel>() {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public void onResponse(@NonNull Call<WeatherRequestRestModel> call,
+                                           @NonNull Response<WeatherRequestRestModel> response) {
+                        if (response.body() != null && response.isSuccessful()) {
+                            final ArrayList<WeatherData> data = renderWeather(response.body());
+                            if (data == null) callback.responseError("JSON parsing error");
+                            else callback.response(data);
+                        } else {
+                            if(response.body() != null)
+                                callback.responseError(String.format("Error: %d", response.body().cod));
+                            else
+                                callback.responseError(resources.getString(R.string.SomeWrong));
+                        }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
 
-            @Override
-            public void onError(String error) {
-                callback.responseError(error);
-            }
-        });
-        requester.run(city);
+                    @Override
+                    public void onFailure(@NonNull Call<WeatherRequestRestModel> call, @NonNull Throwable t) {
+                        callback.responseError(t.getMessage());
+                    }
+                });
     }
 
-    private ArrayList<WeatherData> renderWeather(@Nullable JSONObject jsonObject) {
+    private ArrayList<WeatherData> renderWeather(WeatherRequestRestModel model) {
         ArrayList<WeatherData> list = new ArrayList<>();
+        if (model == null) return null;
 
-        try {
-            if (jsonObject == null) throw new Exception("Вернулся пустой запрос");
-            Log.d(LOG_TAG, "json: " + jsonObject.toString());
+        String pressure = GetText(R.string.pressure,
+                String.valueOf(model.main.pressure),
+                R.string.pressureDimension);
+        String humidity = GetText(R.string.humidity,
+                String.valueOf(model.main.humidity),
+                R.string.humidityDimension);
+        String windSpeed = WindSpeed(model.wind.speed);
+        String temperature = getTemperature(model.main.temp);
+        String weatherIcon = getWeatherIcon(model.weather[0].id,
+                model.sys.sunrise*1000,
+                model.sys.sunset*1000);
+        String date = getUpdateDate(model.dt);
+        list.add(new WeatherData(model.name, pressure,
+                humidity, windSpeed, temperature, weatherIcon, date));
 
-            JSONObject details = jsonObject.getJSONArray("weather").getJSONObject(0);
-            JSONObject main = jsonObject.getJSONObject("main");
-            JSONObject wind = jsonObject.getJSONObject("wind");
-
-            String city = getPlaceName(jsonObject);
-            String pressure = GetText(R.string.pressure, getParam(main, "pressure"),
-                    R.string.pressureDimension);
-            String humidity = GetText(R.string.humidity, getParam(main, "humidity"),
-                    R.string.humidityDimension);
-            String windSpeed = WindSpeed(wind);
-            String temperature = getTemperature(main);
-            String date = getUpdateDate(jsonObject);
-            String weatherIcon = getWeatherIcon(details.getInt("id"),
-                    jsonObject.getJSONObject("sys").getLong("sunrise") * 1000,
-                    jsonObject.getJSONObject("sys").getLong("sunset") * 1000);
-
-            list.add(new WeatherData(city, pressure,
-                    humidity, windSpeed, temperature, weatherIcon, date));
-        } catch (Exception exc) {
-            Log.e(LOG_TAG,
-                    "One or more fields not found in the JSON data. " + exc.getMessage());
-            exc.printStackTrace();
-            list = null;
-        }
         return list;
     }
 
-    private String getPlaceName(JSONObject jsonObject) throws JSONException {
-        return jsonObject.getString("name").toUpperCase() + ", "
-                + jsonObject.getJSONObject("sys").getString("country");
-    }
-
-    private String getParam(JSONObject jsonObject, String paramName) throws JSONException {
-        return jsonObject.getString(paramName);
-    }
-
-    private String getTemperature(JSONObject main) throws JSONException {
+    private String getTemperature(float temperature) {
         return String.format(Locale.getDefault(), "%s: %.0f %s",
                 resources.getString(R.string.temperature),
-                        Math.ceil(main.getDouble("temp")),
-                        isCelsius?
-                                resources.getString(R.string.celsiusDimension):
-                                resources.getString(R.string.fahrenheitDimension));
+                Math.ceil(temperature),
+                isCelsius?
+                        resources.getString(R.string.celsiusDimension):
+                        resources.getString(R.string.fahrenheitDimension));
     }
 
-    private String WindSpeed(JSONObject wind) throws JSONException {
+    private String WindSpeed(float wind) {
         return String.format(Locale.getDefault(),
                 "%s: %.0f %s",
                 resources.getString(R.string.windSpeed),
-                        Math.ceil(wind.getDouble("speed")),
+                Math.ceil(wind),
                 resources.getString(R.string.windSpeedDimension));
     }
 
-    private String getUpdateDate(JSONObject jsonObject) throws JSONException {
+    private String getUpdateDate(long date) {
         DateFormat dateFormat = DateFormat.getDateTimeInstance();
-        return dateFormat.format(new Date(jsonObject.getLong("dt") * 1000));
+        return dateFormat.format(new Date(date * 1000));
     }
 
     private String getWeatherIcon(int actualId, long sunrise, long sunset) {
@@ -172,13 +148,9 @@ public class WeatherDataSource implements DataSource {
     }
 
     private String GetText(int resourceParamName, String value, int resourceParamDimensionName) {
-        return getFullParameterString(
+        return String.format("%s: %s %s",
                 resources.getString(resourceParamName),
                 value,
                 resources.getString(resourceParamDimensionName));
-    }
-
-    private String getFullParameterString(String paramName, String paramValue, String paramDimension) {
-        return String.format("%s: %s %s", paramName, paramValue, paramDimension);
     }
 }

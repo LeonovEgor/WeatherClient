@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -13,6 +14,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Objects;
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
     }
+
 
     private void showSelectCityFragment() {
         Fragment fragment;
@@ -110,7 +113,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
@@ -159,19 +161,6 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().popBackStack();
             }
         }
-    }
-
-
-    @Override
-    protected void onRestoreInstanceState(Bundle saveInstanceState){
-        super.onRestoreInstanceState(saveInstanceState);
-        showMessage(this.getClass().getName() + " - onRestoreInstanceState");
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle saveInstanceState){
-        super.onSaveInstanceState(saveInstanceState);
-        showMessage(this.getClass().getName() + " - onSaveInstanceState()");
     }
 
     private void showMessage(String message) {

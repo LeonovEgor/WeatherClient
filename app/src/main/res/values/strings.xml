@@ -7,7 +7,7 @@
     <string name="humidityDimension">%</string>
 
     <string name="pressure">Pressure</string>
-    <string name="pressureDimension">mm Hg</string>
+    <string name="pressureDimension">hPa</string>
 
     <string name="windSpeed">Wind speed</string>
     <string name="windSpeedDimension">m/s</string>
@@ -16,7 +16,7 @@
 
     <string name="celsiusDimension">&#8451;</string>
 
-    <string name="empty_list">List is empty</string>
+    <string name="empty_list">Add new city</string>
 
     <string name="action_settings">Settings</string>
     <string name="about">About</string>

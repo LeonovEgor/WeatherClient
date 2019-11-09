@@ -90,6 +90,7 @@ public class SettingsFragment extends Fragment {
 
         Storage.saveSettings(Objects.requireNonNull(getActivity()), settings);
 
+
         FragmentManager manager = getFragmentManager();
         if (manager != null)
             getFragmentManager().popBackStack();

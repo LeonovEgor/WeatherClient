@@ -6,7 +6,11 @@ import java.util.List;
 
 public class SettingsHelper {
     public static List<String> getCityListFromString(String cities) {
-        return new ArrayList<>(Arrays.asList(cities.split(",")));
+        ArrayList<String> list = new ArrayList<>(Arrays.asList(cities.split(",")));
+        if(list.size() == 1 && list.get(0).equals("")) {
+            list.clear();
+        }
+        return list;
     }
 
     public static String getCitesStringFromList(List<String> list) {

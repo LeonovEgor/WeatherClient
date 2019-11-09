@@ -14,10 +14,6 @@ import ru.leonov.a1l3_weather.R;
 
 public class FeedBackFragment extends Fragment {
 
-    public FeedBackFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,5 +29,4 @@ public class FeedBackFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
     }
-
 }
