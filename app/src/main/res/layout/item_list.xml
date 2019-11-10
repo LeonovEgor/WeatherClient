@@ -23,7 +23,7 @@
             android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_today_black_24dp"/>
+            app:srcCompat="@drawable/ic_today_black_24dp"/>
 
         <TextView
             android:id="@+id/tvDate"
@@ -35,26 +35,25 @@
             app:layout_constraintStart_toEndOf="@id/cityImage"
             app:layout_constraintTop_toTopOf="@id/cityImage" />
 
-        <TextView
-            android:id="@+id/tvWeatherIcon"
-            style="@style/CardTitleStyle"
+        <ImageView
+            android:id="@+id/iconImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textSize="40sp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvDate" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
         <TextView
             android:id="@+id/tvPressure"
             style="@style/ViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
             android:text="@string/pressure"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvWeatherIcon" />
+            app:layout_constraintTop_toBottomOf="@id/iconImage" />
 
         <TextView
             android:id="@+id/tvHumidity"
@@ -100,7 +99,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginEnd="8dp"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_location_city_black_24dp"
+            app:srcCompat="@drawable/ic_location_city_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tvCity" />
 

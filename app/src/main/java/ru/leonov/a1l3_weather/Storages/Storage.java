@@ -22,6 +22,7 @@ public class Storage {
         SharedPreferences pref = activity.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(Settings.CITIES_KEY, settings.cities);
+        editor.putString(Settings.CITIES_KEY, settings.cities);
         editor.putBoolean(Settings.PRESSURE_KEY, settings.showPressure);
         editor.putBoolean(Settings.HUMIDITY_KEY, settings.showHumidity);
         editor.putBoolean(Settings.WIND_SPEED_KEY, settings.showWindSpeed);

@@ -25,22 +25,22 @@ import ru.leonov.a1l3_weather.Data.WeatherData;
 import ru.leonov.a1l3_weather.Requests.WeatherDataSource;
 import ru.leonov.a1l3_weather.R;
 import ru.leonov.a1l3_weather.Storages.Settings;
+import ru.leonov.a1l3_weather.Storages.Storage;
 
 public class WeatherDetailFragment extends Fragment implements ResponseCallback {
 
     private static final String TAG = "WEATHER";
     private static final String CITY_VALUE_KEY = "CITY";
-    private static final String SETTINGS_VALUE_KEY = "SETTINGS";
 
     private RecyclerView recyclerView;
     private TextView listEmptyView;
+    private Settings settings;
 
-    static WeatherDetailFragment create(String city, Settings settings) {
+    static WeatherDetailFragment create(String city) {
         WeatherDetailFragment fragment = new WeatherDetailFragment();
 
         Bundle args = new Bundle();
         args.putString(CITY_VALUE_KEY, city);
-        args.putSerializable(SETTINGS_VALUE_KEY, settings);
         fragment.setArguments(args);
 
         return fragment;
@@ -54,15 +54,6 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
         }
 
         return city;
-    }
-
-    private Settings getSettings() {
-        Settings settings = null;
-        if (getArguments() != null) {
-            settings = (Settings)getArguments().getSerializable(SETTINGS_VALUE_KEY);
-        }
-
-        return settings;
     }
 
     @Override
@@ -80,9 +71,15 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
 
         Log.d(TAG, this.getClass().getName() + " - onViewCreated");
 
+        getSettings();
         initViews(view);
         initRecyclerView();
     }
+
+    private void getSettings() {
+            settings = Storage.loadSettings(Objects.requireNonNull(getActivity()));
+    }
+
 
     private void initViews(View view) {
         listEmptyView = view.findViewById(R.id.list_empty_view);
@@ -100,7 +97,7 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
         recyclerView.setLayoutManager(layoutManager);
 
         DataSource source = new WeatherDataSource(getResources());
-        source.requestDataSource(getCity(), getSettings().isCelsius, this);
+        source.requestDataSource(getCity(), settings.isCelsius, this);
     }
 
     @Override
@@ -112,7 +109,7 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
             return;
         }
         listEmptyView.setVisibility(View.GONE);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(response, getSettings());
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(response, settings);
         recyclerView.setAdapter(adapter);
     }
 

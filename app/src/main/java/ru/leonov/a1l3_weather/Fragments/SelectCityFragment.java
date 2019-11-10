@@ -259,7 +259,7 @@ public class SelectCityFragment extends Fragment {
     private void showWeatherDetail() {
         listView.setItemChecked(currentPosition, true);
         String city = (String) listView.getAdapter().getItem(currentPosition);
-        WeatherDetailFragment detail = WeatherDetailFragment.create(city, settings);
+        WeatherDetailFragment detail = WeatherDetailFragment.create(city);
 
         FragmentManager manager = getFragmentManager();
         if (manager == null) {

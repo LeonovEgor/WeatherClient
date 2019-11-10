@@ -5,13 +5,17 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ru.leonov.a1l3_weather.Data.WeatherData;
 import ru.leonov.a1l3_weather.R;
@@ -61,9 +65,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.tvWindSpeed.setVisibility(View.GONE);
         }
 
-        holder.tvWeatherIcon.setText(dataSource.get(position).weatherIcon);
         holder.tvDateUpdate.setText(dataSource.get(position).updateDate);
         holder.tvTemperature.setText(dataSource.get(position).temperature);
+
+        Picasso.get().load(dataSource.get(position).weatherIcon).error(R.drawable.ic_broken_image_black_24dp).into(holder.iconView);
+
     }
 
     @Override
@@ -78,14 +84,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView tvHumidity;
         TextView tvWindSpeed;
         TextView tvTemperature;
-        TextView tvWeatherIcon;
         TextView tvDateUpdate;
+        ImageView iconView;
 
         ViewHolder(View view) {
             super(view);
 
             initView(view);
-            setFont();
         }
 
         private void initView(View view) {
@@ -94,14 +99,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tvHumidity = view.findViewById(R.id.tvHumidity);
             tvWindSpeed = view.findViewById(R.id.tvWindSpeed);
             tvTemperature = view.findViewById(R.id.tvTemperature);
-            tvWeatherIcon = view.findViewById(R.id.tvWeatherIcon);
             tvDateUpdate = view.findViewById(R.id.tvDate);
-        }
-
-        private void setFont() {
-            Typeface weatherFont = Typeface.createFromAsset(itemView.getContext().getAssets(),
-                    "fonts/weather.ttf");
-            tvWeatherIcon.setTypeface(weatherFont);
+            iconView = view.findViewById(R.id.iconImage);
         }
     }
 }

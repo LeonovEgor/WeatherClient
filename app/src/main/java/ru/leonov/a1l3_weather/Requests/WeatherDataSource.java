@@ -2,6 +2,7 @@ package ru.leonov.a1l3_weather.Requests;
 
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
+import android.media.Image;
 
 import androidx.annotation.NonNull;
 
@@ -20,6 +21,7 @@ import ru.leonov.a1l3_weather.Requests.Model.WeatherRequestRestModel;
 public class WeatherDataSource implements DataSource {
     private static final String OPEN_WEATHER_API_KEY = "1eb209182666b630fb58efb30a93cb00";
     private static final String UNITS = "metric"; //TODO: Вывести в настройки и оттуда выбирать единицы изменения
+    public static final String ICONS_URL = "http://openweathermap.org/img/wn/";
 
     private final Resources resources;
     private boolean isCelsius;
@@ -44,7 +46,7 @@ public class WeatherDataSource implements DataSource {
                                            @NonNull Response<WeatherRequestRestModel> response) {
                         if (response.body() != null && response.isSuccessful()) {
                             final ArrayList<WeatherData> data = renderWeather(response.body());
-                            if (data == null) callback.responseError("JSON parsing error");
+                            if (data == null) callback.responseError("JSON serialize error");
                             else callback.response(data);
                         } else {
                             if(response.body() != null)
@@ -73,9 +75,8 @@ public class WeatherDataSource implements DataSource {
                 R.string.humidityDimension);
         String windSpeed = WindSpeed(model.wind.speed);
         String temperature = getTemperature(model.main.temp);
-        String weatherIcon = getWeatherIcon(model.weather[0].id,
-                model.sys.sunrise*1000,
-                model.sys.sunset*1000);
+        String weatherIcon = getWeatherIconUrl(model.weather[0].icon);
+
         String date = getUpdateDate(model.dt);
         list.add(new WeatherData(model.name, pressure,
                 humidity, windSpeed, temperature, weatherIcon, date));
@@ -105,46 +106,9 @@ public class WeatherDataSource implements DataSource {
         return dateFormat.format(new Date(date * 1000));
     }
 
-    private String getWeatherIcon(int actualId, long sunrise, long sunset) {
-        int id = actualId / 100;
-        String icon = "";
-
-        if(actualId == 800) {
-            long currentTime = new Date().getTime();
-            if(currentTime >= sunrise && currentTime < sunset) {
-                icon = resources.getString(R.string.weather_sunny);
-            } else {
-                icon = resources.getString(R.string.weather_clear_night);
-            }
-        } else {
-            switch (id) {
-                case 2: {
-                    icon = resources.getString(R.string.weather_thunder);
-                    break;
-                }
-                case 3: {
-                    icon = resources.getString(R.string.weather_drizzle);
-                    break;
-                }
-                case 5: {
-                    icon = resources.getString(R.string.weather_rainy);
-                    break;
-                }
-                case 6: {
-                    icon = resources.getString(R.string.weather_snowy);
-                    break;
-                }
-                case 7: {
-                    icon = resources.getString(R.string.weather_foggy);
-                    break;
-                }
-                case 8: {
-                    icon = resources.getString(R.string.weather_cloudy);
-                    break;
-                }
-            }
-        }
-        return icon;
+    //http://openweathermap.org/img/wn/10d@2x.png
+    private String getWeatherIconUrl(String IconId) {
+        return String.format("%s%s@2x.png", ICONS_URL, IconId);
     }
 
     private String GetText(int resourceParamName, String value, int resourceParamDimensionName) {
