@@ -20,7 +20,8 @@
             android:hint="@string/enterName"
             android:inputType="textPersonName"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/etEMail"
@@ -29,7 +30,8 @@
             android:hint="@string/enterEMail"
             android:inputType="textEmailAddress"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etName" />
+            app:layout_constraintTop_toBottomOf="@id/etName"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/etFeedback"
@@ -40,7 +42,8 @@
             android:lines="5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etEMail" />
+            app:layout_constraintTop_toBottomOf="@id/etEMail"
+            tools:ignore="Autofill" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSend"

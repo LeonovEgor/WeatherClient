@@ -136,7 +136,7 @@ public class SelectCityFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 addItem();
-            };
+            }
         });
     }
 

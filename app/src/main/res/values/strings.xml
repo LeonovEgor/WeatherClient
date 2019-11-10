@@ -28,16 +28,7 @@
     <string name="dateSrt">Updated</string>
 
     <string name="place_not_found">Place not found</string>
-    <string name="weather_sunny">&#xf00d;</string>
-    <string name="weather_clear_night">&#xf02e;</string>
-    <string name="weather_foggy">&#xf014;</string>
-    <string name="weather_cloudy">&#xf013;</string>
-    <string name="weather_rainy">&#xf019;</string>
-    <string name="weather_snowy">&#xf01b;</string>
-    <string name="weather_thunder">&#xf01e;</string>
-    <string name="weather_drizzle">&#xf01c;</string>
 
-    <string name="error">Error</string>
     <string name="menu_add">Add</string>
     <string name="menu_change">Change</string>
     <string name="menu_remove">Remove</string>
@@ -60,7 +51,6 @@
     <string name="enterFeedback">Type your feedback here</string>
     <string name="send">Send</string>
     <string name="menu_feedback">Feedback</string>
-    <string name="Moscow">Moscow</string>
     <string name="pleaseWait">Loading, please wait…</string>
 
 </resources>

@@ -29,16 +29,7 @@
     <string name="cancel">Отмена</string>
 
     <string name="place_not_found">Место не найдено</string>
-    <string name="weather_sunny">&#xf00d;</string>
-    <string name="weather_clear_night">&#xf02e;</string>
-    <string name="weather_foggy">&#xf014;</string>
-    <string name="weather_cloudy">&#xf013;</string>
-    <string name="weather_rainy">&#xf019;</string>
-    <string name="weather_snowy">&#xf01b;</string>
-    <string name="weather_thunder">&#xf01e;</string>
-    <string name="weather_drizzle">&#xf01c;</string>
     <string name="dateSrt">Обновлено</string>
-    <string name="error">Ошибка</string>
 
     <string name="menu_add">Add</string>
     <string name="menu_change">Change</string>
@@ -62,6 +53,5 @@
     <string name="send">Отправить</string>
     <string name="menu_feedback">Отзыв</string>
     <string name="pleaseWait">Загружается, пожалуйста ждите…</string>
-    <string name="Moscow">Moscow</string>
 
 </resources>

@@ -1,7 +1,6 @@
 package ru.leonov.a1l3_weather.Fragments;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import ru.leonov.a1l3_weather.Data.WeatherData;
 import ru.leonov.a1l3_weather.R;

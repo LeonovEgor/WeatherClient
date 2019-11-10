@@ -2,7 +2,6 @@ package ru.leonov.a1l3_weather.Requests;
 
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
-import android.media.Image;
 
 import androidx.annotation.NonNull;
 
@@ -21,7 +20,7 @@ import ru.leonov.a1l3_weather.Requests.Model.WeatherRequestRestModel;
 public class WeatherDataSource implements DataSource {
     private static final String OPEN_WEATHER_API_KEY = "1eb209182666b630fb58efb30a93cb00";
     private static final String UNITS = "metric"; //TODO: Вывести в настройки и оттуда выбирать единицы изменения
-    public static final String ICONS_URL = "http://openweathermap.org/img/wn/";
+    private static final String ICONS_URL = "http://openweathermap.org/img/wn/";
 
     private final Resources resources;
     private boolean isCelsius;

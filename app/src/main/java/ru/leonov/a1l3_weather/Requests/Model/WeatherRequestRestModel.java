@@ -7,7 +7,6 @@ public class WeatherRequestRestModel {
     @SerializedName("main") public MainRestModel main;
     @SerializedName("wind") public WindRestModel wind;
     @SerializedName("dt") public long dt;
-    @SerializedName("sys") public  SysRestModel sys;
     @SerializedName("id") public  long id;
     @SerializedName("name") public String name;
     @SerializedName("cod") public int cod;
