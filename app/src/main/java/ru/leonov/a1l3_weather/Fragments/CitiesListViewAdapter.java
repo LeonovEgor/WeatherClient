@@ -9,19 +9,21 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Map;
 
 import ru.leonov.a1l3_weather.Database.CitiesTable;
 import ru.leonov.a1l3_weather.R;
 
 
-public class ListViewAdapter extends BaseAdapter {
-    private List<String> elements;
+public class CitiesListViewAdapter extends BaseAdapter {
+    //private List<String> elements;
+    private Map<Long, String> elements;
     private Context context;
     private LayoutInflater layoutInflater;
     private SQLiteDatabase database;
 
-    ListViewAdapter(Context context, SQLiteDatabase database) {
-        this.context = context;
+    CitiesListViewAdapter(Context context, SQLiteDatabase database) {
+        //this.context = context;
         layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.database = database;
 
@@ -35,7 +37,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return elements.get(i);
+        return elements.get((long)i);
     }
 
     @Override
@@ -44,27 +46,26 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     void addNewCity(String name) {
-        elements.add(name);
-        CitiesTable.addCity(name, database);
+        long index = CitiesTable.addCity(name, database);
+        elements.put(index, name);
         notifyDataSetChanged();
     }
 
-    void deleteCity(int index) {
+    void deleteCity(long index) {
         if(elements.size() >= index) {
-            String name = elements.get(index);
+            CitiesTable.deleteCity(index, database);
             elements.remove(index);
-            CitiesTable.deleteCity(name, database);
             notifyDataSetChanged();
         }
     }
 
-//    void editElement() {
-//        if(elements.size() > 0) {
-//            NotesTable.editNote(elements.get(elements.size() - 1), 100, database);
-//            elements.set(elements.size() - 1, 100);
-//            notifyDataSetChanged();
-//        }
-//    }
+    void editCityName(long index, String newCityName) {
+        if(elements.size() > 0) {
+            CitiesTable.editCityName(index, newCityName, database);
+            elements.put(index, newCityName);
+            notifyDataSetChanged();
+        }
+    }
 
     void clearList() {
         elements.clear();
@@ -78,7 +79,7 @@ public class ListViewAdapter extends BaseAdapter {
             view = layoutInflater.inflate(R.layout.cities_list, viewGroup, false);
         }
 
-        String text = context.getString(R.string.cityStr);
+        String text = elements.get((long)i);
         TextView textView = view.findViewById(R.id.city_text);
         textView.setText(text);
 

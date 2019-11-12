@@ -44,6 +44,7 @@
     <string name="SomeWrong">Something went wrong!</string>
     <string name="android_advanced_course">Android Advanced</string>
     <string name="add_city">Add city</string>
+    <string name="edit_city">Edit city name</string>
     <string name="CurrentsValues">Current values</string>
 
     <string name="enterName">Type your name here</string>

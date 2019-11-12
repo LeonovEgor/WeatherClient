@@ -46,6 +46,7 @@
     <string name="SomeWrong">Что-то пошло не так!</string>
     <string name="android_advanced_course">Android Продвинутый</string>
     <string name="add_city">Добавить город</string>
+    <string name="edit_city">Изменить имя города</string>
     <string name="CurrentsValues">Окружающие параметры</string>
     <string name="enterName">Введите имя</string>
     <string name="enterEMail">Введите адрес эл. почты</string>

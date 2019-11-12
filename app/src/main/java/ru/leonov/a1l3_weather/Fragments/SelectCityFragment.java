@@ -51,7 +51,7 @@ public class SelectCityFragment extends Fragment {
     private SensorView currentHumidity;
     private SensorView currentPressure;
     private ListView listView;
-    private ListViewAdapter adapter;
+    private CitiesListViewAdapter adapter;
     private FloatingActionButton fab;
 
     private SensorManager sensorManager;
@@ -74,6 +74,7 @@ public class SelectCityFragment extends Fragment {
         Log.d(TAG, this.getClass().getName() + " - onViewCreated");
 
         initViews(view);
+        initDB();
         //loadSettings();
         initList(view);
         initFloatingBtn();
@@ -100,7 +101,7 @@ public class SelectCityFragment extends Fragment {
         listView = view.findViewById(R.id.cities_list_view);
         TextView emptyTextView = view.findViewById(R.id.cities_list_empty_view);
 
-        adapter = new ListViewAdapter(Objects.requireNonNull(getContext()), database);
+        adapter = new CitiesListViewAdapter(Objects.requireNonNull(getContext()), database);
         listView.setAdapter(adapter);
         listView.setEmptyView(emptyTextView);
         registerForContextMenu(listView);
@@ -209,22 +210,20 @@ public class SelectCityFragment extends Fragment {
     }
 
     private void editInputDialog(int position) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
-//        builder.setTitle(R.string.add_city);
-//        final int finalPosition = position;
-//        final EditText input = new EditText(getContext());
-//        input.setInputType(InputType.TYPE_CLASS_TEXT);
-//        input.setText(adapter.getItem(position));
-//        builder.setView(input);
-//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                String sItem = adapter.getItem(finalPosition);
-//                adapter.remove(sItem);
-//                adapter.insert(input.getText().toString(), finalPosition);
-//            }
-//        });
-//        builder.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+        builder.setTitle(R.string.edit_city);
+        final int finalPosition = position;
+        final EditText input = new EditText(getContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText((String)adapter.getItem(position));
+        builder.setView(input);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                adapter.editCityName(finalPosition, input.getText().toString());
+            }
+        });
+        builder.show();
     }
 
     private void removeItem(@NonNull MenuItem item) {
