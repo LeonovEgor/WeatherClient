@@ -1,7 +1,7 @@
 package ru.leonov.a1l3_weather.Fragments;
 
 import android.content.DialogInterface;
-import android.database.DataSetObserver;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,16 +28,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
+import ru.leonov.a1l3_weather.Database.DatabaseHelper;
 import ru.leonov.a1l3_weather.R;
 import ru.leonov.a1l3_weather.SensorsView.SensorHelper;
 import ru.leonov.a1l3_weather.SensorsView.SensorView;
-import ru.leonov.a1l3_weather.Storages.Settings;
-import ru.leonov.a1l3_weather.Storages.SettingsHelper;
-import ru.leonov.a1l3_weather.Storages.Storage;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -47,15 +42,16 @@ public class SelectCityFragment extends Fragment {
     private static final String CITY_VALUE_KEY = "cityKey";
     private static final String BACK_STACK_KEY = "backStackKey";
 
-    private Settings settings;
+    //private Settings settings;
     private int currentPosition = 0;    // Текущая позиция (выбранный город)
+
+    private SQLiteDatabase database;
 
     private SensorView currentTemperature;
     private SensorView currentHumidity;
     private SensorView currentPressure;
     private ListView listView;
-    private TextView emptyTextView;
-    private ArrayAdapter<String> adapter;
+    private ListViewAdapter adapter;
     private FloatingActionButton fab;
 
     private SensorManager sensorManager;
@@ -78,8 +74,8 @@ public class SelectCityFragment extends Fragment {
         Log.d(TAG, this.getClass().getName() + " - onViewCreated");
 
         initViews(view);
-        loadSettings();
-        initList();
+        //loadSettings();
+        initList(view);
         initFloatingBtn();
         getSensors(view);
     }
@@ -88,36 +84,26 @@ public class SelectCityFragment extends Fragment {
         currentTemperature = view.findViewById(R.id.currentTemperature);
         currentHumidity = view.findViewById(R.id.currentHumidity);
         currentPressure = view.findViewById(R.id.currentPressure);
+    }
+
+//    private void loadSettings() {
+//        settings = Storage.loadSettings(Objects.requireNonNull(getActivity()));
+//    }
+
+    private void initDB() {
+        database = new DatabaseHelper(
+                Objects.requireNonNull(getContext()).getApplicationContext()
+        ).getWritableDatabase();
+    }
+
+    private void initList(View view) {
         listView = view.findViewById(R.id.cities_list_view);
-        emptyTextView = view.findViewById(R.id.cities_list_empty_view);
-    }
+        TextView emptyTextView = view.findViewById(R.id.cities_list_empty_view);
 
-    private void loadSettings() {
-        settings = Storage.loadSettings(Objects.requireNonNull(getActivity()));
-    }
-
-    private void initList() {
-        List<String> citiesList = SettingsHelper.getCityListFromString(settings.cities);
-        adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()),
-                android.R.layout.simple_list_item_activated_1,
-                citiesList);
-
+        adapter = new ListViewAdapter(Objects.requireNonNull(getContext()), database);
         listView.setAdapter(adapter);
         listView.setEmptyView(emptyTextView);
         registerForContextMenu(listView);
-
-        adapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                List<String> citiesList = new ArrayList<>();
-                for(int i=0; i < adapter.getCount(); i++) {
-                    citiesList.add(adapter.getItem(i));
-                }
-                settings.cities = SettingsHelper.getCitesStringFromList(citiesList);
-                Storage.saveSettings(Objects.requireNonNull(getActivity()), settings);
-            }
-        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -209,7 +195,7 @@ public class SelectCityFragment extends Fragment {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                adapter.add(input.getText().toString());
+                adapter.addNewCity(input.getText().toString());
             }
         });
         builder.show();
@@ -223,29 +209,28 @@ public class SelectCityFragment extends Fragment {
     }
 
     private void editInputDialog(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
-        builder.setTitle(R.string.add_city);
-        final int finalPosition = position;
-        final EditText input = new EditText(getContext());
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setText(adapter.getItem(position));
-        builder.setView(input);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String sItem = adapter.getItem(finalPosition);
-                adapter.remove(sItem);
-                adapter.insert(input.getText().toString(), finalPosition);
-            }
-        });
-        builder.show();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+//        builder.setTitle(R.string.add_city);
+//        final int finalPosition = position;
+//        final EditText input = new EditText(getContext());
+//        input.setInputType(InputType.TYPE_CLASS_TEXT);
+//        input.setText(adapter.getItem(position));
+//        builder.setView(input);
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                String sItem = adapter.getItem(finalPosition);
+//                adapter.remove(sItem);
+//                adapter.insert(input.getText().toString(), finalPosition);
+//            }
+//        });
+//        builder.show();
     }
 
     private void removeItem(@NonNull MenuItem item) {
         AdapterView.AdapterContextMenuInfo info =
                 (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        String sItem = adapter.getItem(info.position);
-        adapter.remove(sItem);
+        adapter.deleteCity(info.position);
     }
 
     @Override
