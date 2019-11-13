@@ -76,9 +76,8 @@ public class WeatherDataSource implements DataSource {
         String temperature = getTemperature(model.main.temp);
         String weatherIcon = getWeatherIconUrl(model.weather[0].icon);
 
-        String date = getUpdateDate(model.dt);
         list.add(new WeatherData(model.name, pressure,
-                humidity, windSpeed, temperature, weatherIcon, date));
+                humidity, windSpeed, temperature, weatherIcon, model.dt));
 
         return list;
     }
@@ -98,11 +97,6 @@ public class WeatherDataSource implements DataSource {
                 resources.getString(R.string.windSpeed),
                 Math.ceil(wind),
                 resources.getString(R.string.windSpeedDimension));
-    }
-
-    private String getUpdateDate(long date) {
-        DateFormat dateFormat = DateFormat.getDateTimeInstance();
-        return dateFormat.format(new Date(date * 1000));
     }
 
     //http://openweathermap.org/img/wn/10d@2x.png

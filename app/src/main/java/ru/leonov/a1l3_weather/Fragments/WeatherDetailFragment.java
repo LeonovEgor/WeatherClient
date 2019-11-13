@@ -1,6 +1,7 @@
 package ru.leonov.a1l3_weather.Fragments;
 
 import android.annotation.SuppressLint;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import ru.leonov.a1l3_weather.Database.DatabaseHelper;
 import ru.leonov.a1l3_weather.Requests.DataSource;
 import ru.leonov.a1l3_weather.Requests.ResponseCallback;
 import ru.leonov.a1l3_weather.Data.WeatherData;
@@ -35,6 +37,8 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
     private RecyclerView recyclerView;
     private TextView listEmptyView;
     private Settings settings;
+
+    private SQLiteDatabase database;
 
     static WeatherDetailFragment create(String city) {
         WeatherDetailFragment fragment = new WeatherDetailFragment();
@@ -72,12 +76,19 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
         Log.d(TAG, this.getClass().getName() + " - onViewCreated");
 
         getSettings();
+        initDB();
         initViews(view);
         initRecyclerView();
     }
 
     private void getSettings() {
             settings = Storage.loadSettings(Objects.requireNonNull(getActivity()));
+    }
+
+    private void initDB() {
+        database = new DatabaseHelper(
+                Objects.requireNonNull(getContext()).getApplicationContext()
+        ).getWritableDatabase();
     }
 
 
@@ -111,6 +122,9 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
         listEmptyView.setVisibility(View.GONE);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(response, settings);
         recyclerView.setAdapter(adapter);
+
+
+        DatabaseHelper.UpdateForeCase(database, getCity(), response);
     }
 
     @Override

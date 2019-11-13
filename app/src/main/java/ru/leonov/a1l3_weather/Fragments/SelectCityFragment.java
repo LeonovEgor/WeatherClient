@@ -42,7 +42,6 @@ public class SelectCityFragment extends Fragment {
     private static final String CITY_VALUE_KEY = "cityKey";
     private static final String BACK_STACK_KEY = "backStackKey";
 
-    //private Settings settings;
     private int currentPosition = 0;    // Текущая позиция (выбранный город)
 
     private SQLiteDatabase database;
@@ -75,7 +74,6 @@ public class SelectCityFragment extends Fragment {
 
         initViews(view);
         initDB();
-        //loadSettings();
         initList(view);
         initFloatingBtn();
         getSensors(view);
@@ -86,10 +84,6 @@ public class SelectCityFragment extends Fragment {
         currentHumidity = view.findViewById(R.id.currentHumidity);
         currentPressure = view.findViewById(R.id.currentPressure);
     }
-
-//    private void loadSettings() {
-//        settings = Storage.loadSettings(Objects.requireNonNull(getActivity()));
-//    }
 
     private void initDB() {
         database = new DatabaseHelper(
@@ -210,17 +204,18 @@ public class SelectCityFragment extends Fragment {
     }
 
     private void editInputDialog(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
-        builder.setTitle(R.string.edit_city);
         final int finalPosition = position;
         final EditText input = new EditText(getContext());
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setText((String)adapter.getItem(position));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+        builder.setTitle(R.string.edit_city);
         builder.setView(input);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                adapter.editCityName(finalPosition, input.getText().toString());
+                adapter.editCityName((String)adapter.getItem(finalPosition), input.getText().toString());
             }
         });
         builder.show();
@@ -229,7 +224,7 @@ public class SelectCityFragment extends Fragment {
     private void removeItem(@NonNull MenuItem item) {
         AdapterView.AdapterContextMenuInfo info =
                 (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        adapter.deleteCity(info.position);
+        adapter.deleteCity((String)adapter.getItem(info.position));
     }
 
     @Override

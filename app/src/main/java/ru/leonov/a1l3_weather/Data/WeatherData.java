@@ -1,6 +1,8 @@
 package ru.leonov.a1l3_weather.Data;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.util.Date;
 
 public class WeatherData implements Serializable {
     public String city;
@@ -9,10 +11,16 @@ public class WeatherData implements Serializable {
     public String windSpeed;
     public String temperature;
     public String weatherIcon;
-    public String updateDate;
+    public long updateDate;
+
+    public String getUpdateDate() {
+        DateFormat dateFormat = DateFormat.getDateTimeInstance();
+        return dateFormat.format(new Date(updateDate * 1000));
+    }
+
 
     public WeatherData(String city, String pressure, String humidity, String windSpeed, String temperature,
-                       String weatherIcon, String updateDate) {
+                       String weatherIcon, long updateDate) {
         this.city = city;
         this.pressure = pressure;
         this.humidity = humidity;
