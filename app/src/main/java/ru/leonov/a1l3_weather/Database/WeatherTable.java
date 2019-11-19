@@ -13,44 +13,22 @@ public class WeatherTable {
     private final static String COLUMN_WEATHER_HUMIDITY = "Humidity";
     private final static String COLUMN_WEATHER_PRESSURE = "Pressure";
     private final static String COLUMN_WEATHER_WIND_SPEED = "WindSpeed";
+    private final static String COLUMN_WEATHER_ICON = "Icon";
 
     static void createTable(SQLiteDatabase database) {
         String CreateWeatherTableRequest =
                 String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY, " +
                                 "%s INTEGER, " +
                                 "%s TEXT, %s TEXT, " +
-                                "%s TEXT, %s TEXT);",
+                                "%s TEXT, %s TEXT, " +
+                                "%s TEXT);",
                         WEATHER_TABLE_NAME, COLUMN_WEATHER_CITIES_ID,
                         COLUMN_WEATHER_DATE,
                         COLUMN_WEATHER_TEMPERATURE, COLUMN_WEATHER_HUMIDITY,
-                        COLUMN_WEATHER_PRESSURE, COLUMN_WEATHER_WIND_SPEED);
+                        COLUMN_WEATHER_PRESSURE, COLUMN_WEATHER_WIND_SPEED,
+                        COLUMN_WEATHER_ICON);
 
         database.execSQL(CreateWeatherTableRequest);
-    }
-
-    static boolean isWeatherForecastExists(int cityId, SQLiteDatabase database) {
-        String Query = "SELECT * FROM " + WEATHER_TABLE_NAME + " WHERE " + COLUMN_WEATHER_CITIES_ID
-                + " = '" + cityId + "';";
-        Cursor cursor = database.rawQuery(Query, null);
-        if (cursor != null) {
-            try {
-                return cursor.getInt(0) > 0;
-            } finally {
-                cursor.close();
-            }
-        }
-        return false;
-    }
-
-    static void UpdateForecast(int cityId, WeatherData data, SQLiteDatabase database) {
-       String sql = "UPDATE " + WEATHER_TABLE_NAME + " SET " +
-                COLUMN_WEATHER_DATE + " = " + data.updateDate + ", " +
-                COLUMN_WEATHER_TEMPERATURE + " = " + data.temperature + ", " +
-                COLUMN_WEATHER_HUMIDITY  + " = " + data.humidity + ", " +
-                COLUMN_WEATHER_PRESSURE + " = " + data.pressure + ", " +
-                COLUMN_WEATHER_WIND_SPEED + " = " + data.windSpeed +
-                "WHERE " + COLUMN_WEATHER_CITIES_ID + " = " + cityId;
-        database.execSQL(sql);
     }
 
     public static void deleteForecast(int cityId, SQLiteDatabase database) {
@@ -65,14 +43,46 @@ public class WeatherTable {
                 COLUMN_WEATHER_TEMPERATURE + ", " +
                 COLUMN_WEATHER_HUMIDITY + ", " +
                 COLUMN_WEATHER_PRESSURE + ", " +
-                COLUMN_WEATHER_WIND_SPEED + ") VALUES (" +
+                COLUMN_WEATHER_WIND_SPEED + ", " +
+                COLUMN_WEATHER_ICON + ") VALUES (" +
                 cityId + ", " +
                 data.updateDate + ", " +
-                data.temperature + ", " +
-                data.humidity + ", " +
-                data.pressure + ", " +
-                data.windSpeed + ");";
+                "'" + data.temperature + "', " +
+                "'" + data.humidity + "', " +
+                "'" + data.pressure + "', " +
+                "'" + data.windSpeed + "', " +
+                "'" + data.weatherIcon + "');";
 
         database.execSQL(sql);
+    }
+
+    static WeatherData getForecast(String city, long cityId, SQLiteDatabase database) {
+        String Query = "SELECT * FROM " + WEATHER_TABLE_NAME + " WHERE " + COLUMN_WEATHER_CITIES_ID
+                + " = '" + cityId + "';";
+        Cursor cursor = database.rawQuery(Query, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int colDate = cursor.getColumnIndex(COLUMN_WEATHER_DATE);
+            int colTemp = cursor.getColumnIndex(COLUMN_WEATHER_TEMPERATURE);
+            int colHum = cursor.getColumnIndex(COLUMN_WEATHER_HUMIDITY);
+            int colPres = cursor.getColumnIndex(COLUMN_WEATHER_PRESSURE);
+            int colWind = cursor.getColumnIndex(COLUMN_WEATHER_WIND_SPEED);
+            int colIcon = cursor.getColumnIndex(COLUMN_WEATHER_ICON);
+
+            try {
+                return new WeatherData(city,
+                        cursor.getString(colPres),
+                        cursor.getString(colHum),
+                        cursor.getString(colWind),
+                        cursor.getString(colTemp),
+                        cursor.getString(colIcon),
+                        cursor.getLong(colDate)
+                );
+
+            } finally {
+                cursor.close();
+            }
+        }
+        return new WeatherData("NoDataFound", "NoDataFound", "NoDataFound",
+                "NoDataFound", "NoDataFound", "NoDataFound", 0);
     }
 }

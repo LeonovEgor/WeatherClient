@@ -16,6 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         CitiesTable.createTable(sqLiteDatabase);
@@ -27,9 +28,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         WeatherTable.createTable(sqLiteDatabase);
     }
 
-    public static void UpdateForeCase(SQLiteDatabase sqLiteDatabase, String city, ArrayList<WeatherData> response) {
+    public static void UpdateForecast(SQLiteDatabase sqLiteDatabase, String city, ArrayList<WeatherData> response) {
         long cityId = CitiesTable.getId(city, sqLiteDatabase);
         WeatherTable.UpdateOrReplaceForecast(cityId, response.get(0), sqLiteDatabase);
     }
 
+    public static WeatherData getForecast(SQLiteDatabase sqLiteDatabase, String city) {
+        long cityId = CitiesTable.getId(city, sqLiteDatabase);
+        return WeatherTable.getForecast(city, cityId, sqLiteDatabase);
+    }
 }

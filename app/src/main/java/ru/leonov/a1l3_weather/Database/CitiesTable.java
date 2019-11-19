@@ -62,11 +62,11 @@ public class CitiesTable {
         return result == null ? new ArrayList<String>(0) : result;
     }
 
-    public static long getId(String city, SQLiteDatabase database) {
+    static long getId(String city, SQLiteDatabase database) {
         String Query = "SELECT * FROM " + CITIES_TABLE_NAME + " WHERE " + COLUMN_CITIES_NAME
                 + " = '" + city + "';";
         Cursor cursor = database.rawQuery(Query, null);
-        if (cursor != null) {
+        if (cursor != null && cursor.moveToFirst()) {
             int cityId = cursor.getColumnIndex(COLUMN_CITIES_ID);
             try {
                 return cursor.getLong(cityId) ;

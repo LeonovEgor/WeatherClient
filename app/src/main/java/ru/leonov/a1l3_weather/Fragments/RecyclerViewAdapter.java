@@ -66,8 +66,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.tvDateUpdate.setText(dataSource.get(position).getUpdateDate());
         holder.tvTemperature.setText(dataSource.get(position).temperature);
 
-        Picasso.get().load(dataSource.get(position).weatherIcon).error(R.drawable.ic_broken_image_black_24dp).into(holder.iconView);
-
+        if (!dataSource.get(position).weatherIcon.equals(""))
+            Picasso.get().load(dataSource.get(position).weatherIcon).error(R.drawable.ic_broken_image_black_24dp).into(holder.iconView);
     }
 
     @Override

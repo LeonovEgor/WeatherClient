@@ -5,9 +5,7 @@ import android.content.res.Resources;
 
 import androidx.annotation.NonNull;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import retrofit2.Call;

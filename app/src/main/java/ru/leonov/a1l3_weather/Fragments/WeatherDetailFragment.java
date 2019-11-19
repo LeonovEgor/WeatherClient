@@ -18,14 +18,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Objects;
 
+import ru.leonov.a1l3_weather.Data.WeatherData;
 import ru.leonov.a1l3_weather.Database.DatabaseHelper;
+import ru.leonov.a1l3_weather.R;
 import ru.leonov.a1l3_weather.Requests.DataSource;
 import ru.leonov.a1l3_weather.Requests.ResponseCallback;
-import ru.leonov.a1l3_weather.Data.WeatherData;
 import ru.leonov.a1l3_weather.Requests.WeatherDataSource;
-import ru.leonov.a1l3_weather.R;
 import ru.leonov.a1l3_weather.Storages.Settings;
 import ru.leonov.a1l3_weather.Storages.Storage;
 
@@ -107,8 +109,22 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity.getBaseContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        DataSource source = new WeatherDataSource(getResources());
-        source.requestDataSource(getCity(), settings.isCelsius, this);
+        WeatherData data = DatabaseHelper.getForecast(database, getCity());
+        if (isDateActual(data.updateDate*1000)) { // данные из БД
+            listEmptyView.setVisibility(View.GONE);
+            RecyclerViewAdapter adapter = new RecyclerViewAdapter(Collections.singletonList(data), settings);
+            recyclerView.setAdapter(adapter);
+        }
+        else { // данные из Интенет
+            DataSource source = new WeatherDataSource(getResources());
+            source.requestDataSource(getCity(), settings.isCelsius, this);
+        }
+    }
+
+    private boolean isDateActual(long date) {
+        long milliseconds = Calendar.getInstance().getTimeInMillis() - date;
+        int minutes = (int) (milliseconds / (60 * 1000));
+        return minutes < 15;
     }
 
     @Override
@@ -124,7 +140,7 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
         recyclerView.setAdapter(adapter);
 
 
-        DatabaseHelper.UpdateForeCase(database, getCity(), response);
+        DatabaseHelper.UpdateForecast(database, getCity(), response);
     }
 
     @Override
