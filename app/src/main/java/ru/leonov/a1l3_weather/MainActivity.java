@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-
     private void showSelectCityFragment() {
         Fragment fragment;
         try {
@@ -164,4 +163,6 @@ public class MainActivity extends AppCompatActivity
     private void showMessage(String message) {
         Log.d(TAG, message);
     }
+
+
 }
