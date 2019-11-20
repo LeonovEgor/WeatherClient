@@ -54,7 +54,7 @@
     <string name="menu_feedback">Feedback</string>
     <string name="pleaseWait">Loading, please wait…</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="NoProviderFound">No provider found</string>
+    <string name="Provider">Provider %s</string>
 
 </resources>

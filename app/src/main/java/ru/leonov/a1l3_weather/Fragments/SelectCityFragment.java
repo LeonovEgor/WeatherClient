@@ -77,6 +77,21 @@ public class SelectCityFragment extends Fragment {
         initList(view);
         initFloatingBtn();
         getSensors(view);
+        setCurrentWeaterFragment();
+    }
+
+    private void setCurrentWeaterFragment() {
+        FragmentManager manager = getFragmentManager();
+        if (manager == null) {
+            Log.e(TAG, "Ошибка смены Fragment");
+            return;
+        }
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.currentWeatherFrame,  new CurrentWeatherFragment())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
     }
 
     private void initViews(View view) {

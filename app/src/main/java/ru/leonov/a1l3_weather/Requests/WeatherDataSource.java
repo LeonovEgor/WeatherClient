@@ -33,6 +33,39 @@ public class WeatherDataSource implements DataSource {
         updateWeatherData(city, callback);
     }
 
+    @Override
+    public void requestDataSourceByGoe(String latitude, String longitude, boolean isCelsius, ResponseCallback callback) {
+        this.isCelsius = isCelsius;
+        updateWeatherData(latitude, longitude, callback);
+    }
+
+    private void updateWeatherData(String latitude, String longitude, final ResponseCallback callback) {
+        OpenWeatherRepo.getInstance().getAdapter().loadWeatherByGeo(latitude, longitude,
+                OPEN_WEATHER_API_KEY, UNITS)
+                .enqueue(new Callback<WeatherRequestRestModel>() {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public void onResponse(@NonNull Call<WeatherRequestRestModel> call,
+                                           @NonNull Response<WeatherRequestRestModel> response) {
+                        if (response.body() != null && response.isSuccessful()) {
+                            final ArrayList<WeatherData> data = renderWeather(response.body());
+                            if (data == null) callback.responseError("JSON serialize error");
+                            else callback.response(data);
+                        } else {
+                            if(response.body() != null)
+                                callback.responseError(String.format("Error: %d", response.body().cod));
+                            else
+                                callback.responseError(resources.getString(R.string.SomeWrong));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<WeatherRequestRestModel> call, @NonNull Throwable t) {
+                        callback.responseError(t.getMessage());
+                    }
+                });
+    }
+
     private void updateWeatherData(final String city, final ResponseCallback callback) {
         OpenWeatherRepo.getInstance().getAdapter().loadWeather(city,
                 OPEN_WEATHER_API_KEY, UNITS)

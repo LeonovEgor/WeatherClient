@@ -55,4 +55,7 @@
     <string name="menu_feedback">Отзыв</string>
     <string name="pleaseWait">Загружается, пожалуйста ждите…</string>
 
+    <string name="NoProviderFound">Провайдер не найден</string>
+    <string name="Provider">Провайдер %s</string>
+
 </resources>
