@@ -2,10 +2,12 @@ package ru.leonov.a1l3_weather.Database;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
 import ru.leonov.a1l3_weather.Data.WeatherData;
 
-public class WeatherTable {
+class WeatherTable {
     private final static String WEATHER_TABLE_NAME = "Weather";
     private final static String COLUMN_WEATHER_CITIES_ID = "CityId";
     private final static String COLUMN_WEATHER_DATE = "Date";
@@ -14,6 +16,8 @@ public class WeatherTable {
     private final static String COLUMN_WEATHER_PRESSURE = "Pressure";
     private final static String COLUMN_WEATHER_WIND_SPEED = "WindSpeed";
     private final static String COLUMN_WEATHER_ICON = "Icon";
+    private final static String COLUMN_WEATHER_UNITS = "Units";
+    private static final String TAG = "WEATHER";
 
     static void createTable(SQLiteDatabase database) {
         String CreateWeatherTableRequest =
@@ -21,19 +25,24 @@ public class WeatherTable {
                                 "%s INTEGER, " +
                                 "%s TEXT, %s TEXT, " +
                                 "%s TEXT, %s TEXT, " +
-                                "%s TEXT);",
+                                "%s TEXT, %s TEXT);",
                         WEATHER_TABLE_NAME, COLUMN_WEATHER_CITIES_ID,
                         COLUMN_WEATHER_DATE,
                         COLUMN_WEATHER_TEMPERATURE, COLUMN_WEATHER_HUMIDITY,
                         COLUMN_WEATHER_PRESSURE, COLUMN_WEATHER_WIND_SPEED,
-                        COLUMN_WEATHER_ICON);
+                        COLUMN_WEATHER_ICON, COLUMN_WEATHER_UNITS);
 
         database.execSQL(CreateWeatherTableRequest);
     }
 
-    public static void deleteForecast(int cityId, SQLiteDatabase database) {
-        database.delete(WEATHER_TABLE_NAME,
-                COLUMN_WEATHER_CITIES_ID + " = '" + cityId + "';", null);
+    static void updateTable(SQLiteDatabase database) {
+
+        String query = "ALTER TABLE " + WEATHER_TABLE_NAME + " ADD COLUMN " + COLUMN_WEATHER_UNITS + " TEXT default 'metric'";
+        try {
+            database.execSQL(query);
+        } catch (SQLiteException ex) {
+            Log.w(TAG, "Altering " + WEATHER_TABLE_NAME + ": " + ex.getMessage());
+        }
     }
 
     static void UpdateOrReplaceForecast(long cityId, WeatherData data, SQLiteDatabase database) {
@@ -67,6 +76,7 @@ public class WeatherTable {
             int colPres = cursor.getColumnIndex(COLUMN_WEATHER_PRESSURE);
             int colWind = cursor.getColumnIndex(COLUMN_WEATHER_WIND_SPEED);
             int colIcon = cursor.getColumnIndex(COLUMN_WEATHER_ICON);
+            int colUnits = cursor.getColumnIndex(COLUMN_WEATHER_UNITS);
 
             try {
                 return new WeatherData(city,
@@ -75,7 +85,8 @@ public class WeatherTable {
                         cursor.getString(colWind),
                         cursor.getString(colTemp),
                         cursor.getString(colIcon),
-                        cursor.getLong(colDate)
+                        cursor.getLong(colDate),
+                        cursor.getString(colUnits)
                 );
 
             } finally {
@@ -83,6 +94,6 @@ public class WeatherTable {
             }
         }
         return new WeatherData("NoDataFound", "NoDataFound", "NoDataFound",
-                "NoDataFound", "NoDataFound", "NoDataFound", 0);
+                "NoDataFound", "NoDataFound", "NoDataFound", 0, "");
     }
 }

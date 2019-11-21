@@ -117,7 +117,7 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
         }
         else { // данные из Интенет
             DataSource source = new WeatherDataSource(getResources());
-            source.requestDataSource(getCity(), settings.isCelsius, this);
+            source.requestDataSource(getCity(), settings.units, this);
         }
     }
 

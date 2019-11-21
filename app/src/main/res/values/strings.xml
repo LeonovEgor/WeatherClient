@@ -10,7 +10,9 @@
     <string name="pressureDimension">hPa</string>
 
     <string name="windSpeed">Wind speed</string>
-    <string name="windSpeedDimension">m/s</string>
+    <string name="metersPerSecond">meter/sec</string>
+    <string name="milesPerSecond">miles/sec</string>
+
 
     <string name="temperature">Temperature</string>
 
@@ -56,5 +58,7 @@
 
     <string name="NoProviderFound">No provider found</string>
     <string name="Provider">Provider %s</string>
+    <string name="metric">Metric</string>
+    <string name="imperial">Imperial</string>
 
 </resources>

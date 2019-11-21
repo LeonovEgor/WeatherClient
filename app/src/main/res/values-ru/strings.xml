@@ -11,7 +11,8 @@
     <string name="pressureDimension">гПа</string>
 
     <string name="windSpeed">Скорость ветра</string>
-    <string name="windSpeedDimension">м/с</string>
+    <string name="metersPerSecond">метров/сек</string>
+    <string name="milesPerSecond">миль/сек</string>
 
     <string name="temperature">Температура</string>
 
@@ -57,5 +58,7 @@
 
     <string name="NoProviderFound">Провайдер не найден</string>
     <string name="Provider">Провайдер %s</string>
+    <string name="metric">Метрическая</string>
+    <string name="imperial">Английская</string>
 
 </resources>

@@ -68,8 +68,8 @@ public class SettingsFragment extends Fragment {
         cbShowPressure.setChecked(settings.showPressure);
         cbShowHumidity.setChecked(settings.showHumidity);
         cbShowWindSpeed.setChecked(settings.showWindSpeed);
-        rbIsCelsius.setChecked(settings.isCelsius);
-        rbIsFahrenheit.setChecked(!settings.isCelsius);
+        rbIsCelsius.setChecked(settings.units.equals(Settings.METRIC));
+        rbIsFahrenheit.setChecked(settings.units.equals(Settings.IMPERIAL));
     }
 
     private void setBehaviourForSaveActBtn() {
@@ -86,7 +86,7 @@ public class SettingsFragment extends Fragment {
         settings.showPressure = cbShowPressure.isChecked();
         settings.showHumidity = cbShowHumidity.isChecked();
         settings.showWindSpeed = cbShowWindSpeed.isChecked();
-        settings.isCelsius = rbIsCelsius.isChecked();
+        settings.units = rbIsCelsius.isChecked() ? Settings.METRIC: Settings.IMPERIAL;
 
         Storage.saveSettings(Objects.requireNonNull(getActivity()), settings);
 

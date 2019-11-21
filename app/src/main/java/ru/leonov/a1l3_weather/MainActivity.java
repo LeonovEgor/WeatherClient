@@ -163,6 +163,4 @@ public class MainActivity extends AppCompatActivity
     private void showMessage(String message) {
         Log.d(TAG, message);
     }
-
-
 }

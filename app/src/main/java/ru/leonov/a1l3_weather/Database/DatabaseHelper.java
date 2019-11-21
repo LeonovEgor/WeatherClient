@@ -25,7 +25,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        WeatherTable.createTable(sqLiteDatabase);
+        if (oldVersion == 1) WeatherTable.createTable(sqLiteDatabase);
+        if (oldVersion == 2) WeatherTable.updateTable(sqLiteDatabase);
     }
 
     public static void UpdateForecast(SQLiteDatabase sqLiteDatabase, String city, ArrayList<WeatherData> response) {

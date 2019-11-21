@@ -17,31 +17,31 @@ import ru.leonov.a1l3_weather.Requests.Model.WeatherRequestRestModel;
 
 public class WeatherDataSource implements DataSource {
     private static final String OPEN_WEATHER_API_KEY = "1eb209182666b630fb58efb30a93cb00";
-    private static final String UNITS = "metric"; //TODO: Вывести в настройки и оттуда выбирать единицы изменения
     private static final String ICONS_URL = "http://openweathermap.org/img/wn/";
+    private static final String METRIC = "METRIC";
 
     private final Resources resources;
-    private boolean isCelsius;
+    private String units; // Единицы измерения
 
     public WeatherDataSource(Resources res) {
         this.resources = res;
     }
 
     @Override
-    public void requestDataSource(String city, boolean isCelsius, ResponseCallback callback) {
-        this.isCelsius = isCelsius;
+    public void requestDataSource(String city, String units, ResponseCallback callback) {
+        this.units = units;
         updateWeatherData(city, callback);
     }
 
     @Override
-    public void requestDataSourceByGoe(String latitude, String longitude, boolean isCelsius, ResponseCallback callback) {
-        this.isCelsius = isCelsius;
+    public void requestDataSourceByGeo(String latitude, String longitude, String units, ResponseCallback callback) {
+        this.units = units;
         updateWeatherData(latitude, longitude, callback);
     }
 
     private void updateWeatherData(String latitude, String longitude, final ResponseCallback callback) {
         OpenWeatherRepo.getInstance().getAdapter().loadWeatherByGeo(latitude, longitude,
-                OPEN_WEATHER_API_KEY, UNITS)
+                OPEN_WEATHER_API_KEY, units)
                 .enqueue(new Callback<WeatherRequestRestModel>() {
                     @SuppressLint("DefaultLocale")
                     @Override
@@ -68,7 +68,7 @@ public class WeatherDataSource implements DataSource {
 
     private void updateWeatherData(final String city, final ResponseCallback callback) {
         OpenWeatherRepo.getInstance().getAdapter().loadWeather(city,
-                OPEN_WEATHER_API_KEY, UNITS)
+                OPEN_WEATHER_API_KEY, units)
                 .enqueue(new Callback<WeatherRequestRestModel>() {
                     @SuppressLint("DefaultLocale")
                     @Override
@@ -108,7 +108,7 @@ public class WeatherDataSource implements DataSource {
         String weatherIcon = getWeatherIconUrl(model.weather[0].icon);
 
         list.add(new WeatherData(model.name, pressure,
-                humidity, windSpeed, temperature, weatherIcon, model.dt));
+                humidity, windSpeed, temperature, weatherIcon, model.dt, units));
 
         return list;
     }
@@ -117,7 +117,7 @@ public class WeatherDataSource implements DataSource {
         return String.format(Locale.getDefault(), "%s: %.0f %s",
                 resources.getString(R.string.temperature),
                 Math.ceil(temperature),
-                isCelsius?
+                units.toUpperCase().equals(METRIC)?
                         resources.getString(R.string.celsiusDimension):
                         resources.getString(R.string.fahrenheitDimension));
     }
@@ -127,7 +127,9 @@ public class WeatherDataSource implements DataSource {
                 "%s: %.0f %s",
                 resources.getString(R.string.windSpeed),
                 Math.ceil(wind),
-                resources.getString(R.string.windSpeedDimension));
+                units.toUpperCase().equals(METRIC)?
+                        resources.getString(R.string.metersPerSecond):
+                        resources.getString(R.string.milesPerSecond));
     }
 
     //http://openweathermap.org/img/wn/10d@2x.png

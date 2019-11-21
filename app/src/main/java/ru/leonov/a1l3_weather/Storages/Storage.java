@@ -14,7 +14,7 @@ public class Storage {
         settings.showPressure = pref.getBoolean(Settings.PRESSURE_KEY, true);
         settings.showHumidity = pref.getBoolean(Settings.HUMIDITY_KEY, true);
         settings.showWindSpeed = pref.getBoolean(Settings.WIND_SPEED_KEY, true);
-        settings.isCelsius = pref.getBoolean(Settings.IS_CELSIUS_KEY, true);
+        settings.units = pref.getString(Settings.UNITS_KEY, "metric");
         return settings;
     }
 
@@ -22,11 +22,10 @@ public class Storage {
         SharedPreferences pref = activity.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(Settings.CITIES_KEY, settings.cities);
-        editor.putString(Settings.CITIES_KEY, settings.cities);
         editor.putBoolean(Settings.PRESSURE_KEY, settings.showPressure);
         editor.putBoolean(Settings.HUMIDITY_KEY, settings.showHumidity);
         editor.putBoolean(Settings.WIND_SPEED_KEY, settings.showWindSpeed);
-        editor.putBoolean(Settings.IS_CELSIUS_KEY, settings.isCelsius);
+        editor.putString(Settings.UNITS_KEY, settings.units);
 
         editor.apply();
     }
