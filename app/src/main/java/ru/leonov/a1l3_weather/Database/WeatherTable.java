@@ -35,7 +35,7 @@ class WeatherTable {
         database.execSQL(CreateWeatherTableRequest);
     }
 
-    static void updateTable(SQLiteDatabase database) {
+    static void updateTable2(SQLiteDatabase database) {
 
         String query = "ALTER TABLE " + WEATHER_TABLE_NAME + " ADD COLUMN " + COLUMN_WEATHER_UNITS + " TEXT default 'metric'";
         try {
@@ -45,6 +45,17 @@ class WeatherTable {
         }
     }
 
+    static void updateTable1(SQLiteDatabase database) {
+
+        String query = "ALTER TABLE " + WEATHER_TABLE_NAME + " ADD COLUMN " + COLUMN_WEATHER_ICON + " TEXT default ''";
+        try {
+            database.execSQL(query);
+        } catch (SQLiteException ex) {
+            Log.w(TAG, "Altering " + WEATHER_TABLE_NAME + ": " + ex.getMessage());
+        }
+    }
+
+
     static void UpdateOrReplaceForecast(long cityId, WeatherData data, SQLiteDatabase database) {
         String sql = "REPLACE INTO " + WEATHER_TABLE_NAME + " (" +
                 COLUMN_WEATHER_CITIES_ID + ", " +
@@ -53,14 +64,16 @@ class WeatherTable {
                 COLUMN_WEATHER_HUMIDITY + ", " +
                 COLUMN_WEATHER_PRESSURE + ", " +
                 COLUMN_WEATHER_WIND_SPEED + ", " +
-                COLUMN_WEATHER_ICON + ") VALUES (" +
+                COLUMN_WEATHER_ICON  + ", " +
+                COLUMN_WEATHER_UNITS + ") VALUES (" +
                 cityId + ", " +
                 data.updateDate + ", " +
                 "'" + data.temperature + "', " +
                 "'" + data.humidity + "', " +
                 "'" + data.pressure + "', " +
                 "'" + data.windSpeed + "', " +
-                "'" + data.weatherIcon + "');";
+                "'" + data.weatherIcon + "', " +
+                "'" + data.units + "');";
 
         database.execSQL(sql);
     }

@@ -110,7 +110,7 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
         recyclerView.setLayoutManager(layoutManager);
 
         WeatherData data = DatabaseHelper.getForecast(database, getCity());
-        if (isDateActual(data.updateDate*1000)) { // данные из БД
+        if (isDateActual(data.updateDate*1000) && settings.units.equals(data.units)) { // данные из БД
             listEmptyView.setVisibility(View.GONE);
             RecyclerViewAdapter adapter = new RecyclerViewAdapter(Collections.singletonList(data), settings);
             recyclerView.setAdapter(adapter);

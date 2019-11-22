@@ -280,12 +280,21 @@ public class SelectCityFragment extends Fragment {
         if (sensorTemperature != null)
             sensorManager.registerListener(listenerTemperature, sensorTemperature,
                     SensorManager.SENSOR_DELAY_NORMAL);
+        else {
+            currentTemperature.setVisibility(View.GONE);
+        }
         if (sensorHumidity != null)
             sensorManager.registerListener(listenerHumidity, sensorHumidity,
                     SensorManager.SENSOR_DELAY_NORMAL);
+        else {
+            currentHumidity.setVisibility(View.GONE);
+        }
         if (sensorPressure != null)
             sensorManager.registerListener(listenerPressure, sensorPressure,
                     SensorManager.SENSOR_DELAY_NORMAL);
+        else {
+            currentPressure.setVisibility(View.GONE);
+        }
     }
 
     @Override

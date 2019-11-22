@@ -10,7 +10,7 @@ import ru.leonov.a1l3_weather.Data.WeatherData;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "weather.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 5;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -26,7 +26,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         if (oldVersion == 1) WeatherTable.createTable(sqLiteDatabase);
-        if (oldVersion == 2) WeatherTable.updateTable(sqLiteDatabase);
+        if (oldVersion == 3) WeatherTable.updateTable1(sqLiteDatabase);
+        if (oldVersion == 4) WeatherTable.updateTable2(sqLiteDatabase);
     }
 
     public static void UpdateForecast(SQLiteDatabase sqLiteDatabase, String city, ArrayList<WeatherData> response) {
