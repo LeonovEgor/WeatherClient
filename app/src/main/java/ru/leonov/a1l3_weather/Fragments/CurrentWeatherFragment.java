@@ -65,7 +65,14 @@ public class CurrentWeatherFragment extends Fragment implements ResponseCallback
 
         initView();
         getSettings();
+        showLastLocation();
         checkPermission();
+    }
+
+    private void showLastLocation() {
+        if (settings.lastLat != 0.0 && settings.lastLong != 0.0) {
+            getCurrentWeather(Double.toString(settings.lastLat), Double.toString(settings.lastLong));
+        }
     }
 
     private void getSettings() {
@@ -81,7 +88,6 @@ public class CurrentWeatherFragment extends Fragment implements ResponseCallback
         cityView = activity.findViewById(R.id.cityView);
         temperatureView = activity.findViewById(R.id.temperatureView);
     }
-
 
     private void checkPermission() {
         if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()),
@@ -101,25 +107,32 @@ public class CurrentWeatherFragment extends Fragment implements ResponseCallback
                 && ActivityCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             return;
-        LocationManager locationManager = (LocationManager) Objects.requireNonNull(getActivity()).getSystemService(LOCATION_SERVICE);
+        final LocationManager locationManager = (LocationManager) Objects.requireNonNull(getActivity()).getSystemService(LOCATION_SERVICE);
+
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_COARSE);
 
         String provider = Objects.requireNonNull(locationManager).getBestProvider(criteria, true);
         if (provider != null) {
+
+            try {
+                Location location = locationManager.getLastKnownLocation(provider);
+                showLocation(location);
+            }
+            catch(SecurityException e) {
+                requestLocationPermissions();
+            }
+
             provider = String.format(getActivity().getString(R.string.Provider), provider);
             providerView.setText(provider);
 
             locationManager.requestSingleUpdate(criteria, new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-
-                    String latitude = Double.toString(location.getLatitude()); // широта
-                    String longitude = Double.toString(location.getLongitude()); // Долгота
-                    String accuracy = Float.toString(location.getAccuracy()); // Точность
-                    String text = String.format("%s, %s; %s", latitude, longitude, accuracy);
-                    geoView.setText(text);
-                    getCurrentWeather(latitude, longitude);
+                    showLocation(location);
+                    settings.lastLat = location.getLatitude();
+                    settings.lastLong = location.getLongitude();
+                    Storage.saveSettings(Objects.requireNonNull(getActivity()), settings);
                 }
 
                 @Override
@@ -133,6 +146,19 @@ public class CurrentWeatherFragment extends Fragment implements ResponseCallback
         else {
             providerView.setText(R.string.NoProviderFound);
         }
+    }
+
+    private void showLocation(Location location) {
+        if (location == null) {
+            return;
+        }
+
+        String latitude = Double.toString(location.getLatitude()); // широта
+        String longitude = Double.toString(location.getLongitude()); // Долгота
+        String accuracy = Float.toString(location.getAccuracy()); // Точность
+        String text = String.format("%s, %s; %s", latitude, longitude, accuracy);
+        geoView.setText(text);
+        getCurrentWeather(latitude, longitude);
     }
 
     private void getCurrentWeather(String latitude, String longitude) {
