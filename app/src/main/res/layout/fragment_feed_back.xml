@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.FeedBackFragment">
+    tools:context=".fragments.FeedBackFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/ViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".Fragments.AboutFragment">
+        tools:context=".fragments.AboutFragment">
 
         <EditText
             android:id="@+id/etName"

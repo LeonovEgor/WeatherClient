@@ -23,7 +23,7 @@
                 android:text="@string/CurrentsValues"
                 style="@style/CardTitleStyle"/>
 
-            <ru.leonov.a1l3_weather.SensorsView.SensorView
+            <ru.leonov.weather.sensorsView.SensorView
                 android:id="@+id/currentTemperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
                 app:textDimension="14sp"
                 style="@style/Margin"/>
 
-            <ru.leonov.a1l3_weather.SensorsView.SensorView
+            <ru.leonov.weather.sensorsView.SensorView
                 android:id="@+id/currentHumidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
                 app:textDimension="14sp"
                 style="@style/Margin"/>
 
-            <ru.leonov.a1l3_weather.SensorsView.SensorView
+            <ru.leonov.weather.sensorsView.SensorView
                 android:id="@+id/currentPressure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
