@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         style="@style/ViewStyle"
-        tools:context=".Fragments.SettingsFragment">
+        tools:context=".fragments.SettingsFragment">
 
         <CheckBox
             android:id="@+id/cbPressure"
