@@ -73,12 +73,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void setBehaviourForSaveActBtn() {
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveSettings();
-            }
-        });
+        btnSave.setOnClickListener(view -> saveSettings());
     }
 
     private void saveSettings() {
@@ -96,13 +91,11 @@ public class SettingsFragment extends Fragment {
     }
 
     private void setBehaviourForCloseActBtn() {
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager manager = getFragmentManager();
-                if (manager != null)
-                    getFragmentManager().popBackStack();
-            }
+        btnCancel.setOnClickListener(view -> {
+            FragmentManager manager = getFragmentManager();
+            if (manager != null)
+                getFragmentManager().popBackStack();
         });
     }
+
 }

@@ -147,4 +147,5 @@ public class WeatherDetailFragment extends Fragment implements ResponseCallback 
     public void responseError(String error) {
         listEmptyView.setText(error);
     }
+
 }

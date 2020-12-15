@@ -15,9 +15,9 @@ import ru.leonov.weather.R;
 
 
 public class CitiesListViewAdapter extends BaseAdapter {
-    private List<String> elements;
-    private LayoutInflater layoutInflater;
-    private SQLiteDatabase database;
+    private final List<String> elements;
+    private final LayoutInflater layoutInflater;
+    private final SQLiteDatabase database;
 
     CitiesListViewAdapter(Context context, SQLiteDatabase database) {
         layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -75,4 +75,5 @@ public class CitiesListViewAdapter extends BaseAdapter {
 
         return view;
     }
+    
 }

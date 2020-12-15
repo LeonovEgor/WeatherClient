@@ -202,4 +202,5 @@ public class CurrentWeatherFragment extends Fragment implements ResponseCallback
     public void responseError(String error) {
         temperatureView.setText(error);
     }
+
 }

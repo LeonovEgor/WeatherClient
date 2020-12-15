@@ -2,8 +2,8 @@ package ru.leonov.weather;
 
 import android.content.Context;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +13,8 @@ import java.util.List;
 
 import ru.leonov.weather.storages.SettingsHelper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -27,7 +28,7 @@ public class WeatherTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("ru.leonov.a1l3_weather", appContext.getPackageName());
+        assertEquals("ru.leonov.weather", appContext.getPackageName());
     }
 
     @Test
@@ -41,10 +42,11 @@ public class WeatherTest {
 
     @Test
     public void getCityListFromString_test() {
-        List<String> requeredList = Arrays.asList("city1", "city2", "city3");
+        List<String> requiredList = Arrays.asList("city1", "city2", "city3");
         String cities = "city1,city2,city3";
         List<String> test = SettingsHelper.getCityListFromString(cities);
 
-        assertArrayEquals(requeredList.toArray(), test.toArray());
+        assertArrayEquals(requiredList.toArray(), test.toArray());
     }
+
 }

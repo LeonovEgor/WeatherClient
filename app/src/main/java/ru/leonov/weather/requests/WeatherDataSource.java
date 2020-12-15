@@ -13,7 +13,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import ru.leonov.weather.data.WeatherData;
 import ru.leonov.weather.R;
-import ru.leonov.weather.requests.Model.WeatherRequestRestModel;
+import ru.leonov.weather.requests.model.WeatherRequestRestModel;
 
 public class WeatherDataSource implements DataSource {
     private static final String OPEN_WEATHER_API_KEY = "1eb209182666b630fb58efb30a93cb00";
@@ -132,7 +132,7 @@ public class WeatherDataSource implements DataSource {
                         resources.getString(R.string.milesPerSecond));
     }
 
-    //http://openweathermap.org/img/wn/10d@2x.png
+    //http://openWeatherMap.org/img/wn/10d@2x.png
     private String getWeatherIconUrl(String IconId) {
         return String.format("%s%s@2x.png", ICONS_URL, IconId);
     }
@@ -143,4 +143,5 @@ public class WeatherDataSource implements DataSource {
                 value,
                 resources.getString(resourceParamDimensionName));
     }
+
 }

@@ -1,4 +1,4 @@
-package ru.leonov.weather.requests.Model;
+package ru.leonov.weather.requests.model;
 
 import com.google.gson.annotations.SerializedName;
 

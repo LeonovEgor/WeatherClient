@@ -7,7 +7,7 @@ class OpenWeatherRepo {
     private static final String BASE_URL = "https://api.openweathermap.org/";
 
     private static OpenWeatherRepo instance = null;
-    private IOpenWeather adapter;
+    private final IOpenWeather adapter;
 
     private OpenWeatherRepo() {
         adapter = createAdapter();
@@ -31,4 +31,5 @@ class OpenWeatherRepo {
 
         return adapter.create(IOpenWeather.class);
     }
+
 }

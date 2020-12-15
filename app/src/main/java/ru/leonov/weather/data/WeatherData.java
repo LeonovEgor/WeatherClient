@@ -31,4 +31,5 @@ public class WeatherData implements Serializable {
         this.updateDate = updateDate;
         this.units = units;
     }
+
 }

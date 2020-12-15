@@ -30,7 +30,7 @@ public class SensorView extends View {
 
     private TextPaint mTextPaint;
     private Paint mRectPaint;
-    private Rect mTextBoundRect = new Rect();
+    private final Rect mTextBoundRect = new Rect();
 
     public SensorView(Context context) {
         super(context);
@@ -222,4 +222,5 @@ public class SensorView extends View {
     public void setDrawable(Drawable drawable) {
         mDrawable = drawable;
     }
+
 }

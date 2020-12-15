@@ -3,7 +3,7 @@ package ru.leonov.weather.requests;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import ru.leonov.weather.requests.Model.WeatherRequestRestModel;
+import ru.leonov.weather.requests.model.WeatherRequestRestModel;
 
 public interface IOpenWeather {
     String API_PATH = "data/2.5/weather";

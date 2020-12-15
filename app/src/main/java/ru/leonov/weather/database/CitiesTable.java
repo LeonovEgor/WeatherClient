@@ -59,7 +59,7 @@ public class CitiesTable {
             if (cursor != null) cursor.close(); }
         catch (Exception ignored) {}
 
-        return result == null ? new ArrayList<String>(0) : result;
+        return result == null ? new ArrayList<>(0) : result;
     }
 
     static long getId(String city, SQLiteDatabase database) {

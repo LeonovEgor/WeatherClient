@@ -1,6 +1,5 @@
 package ru.leonov.weather.fragments;
 
-import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -77,10 +76,10 @@ public class SelectCityFragment extends Fragment {
         initList(view);
         initFloatingBtn();
         getSensors(view);
-        setCurrentWeaterFragment();
+        setCurrentWeatherFragment();
     }
 
-    private void setCurrentWeaterFragment() {
+    private void setCurrentWeatherFragment() {
         FragmentManager manager = getFragmentManager();
         if (manager == null) {
             Log.e(TAG, "Ошибка смены Fragment");
@@ -115,25 +114,17 @@ public class SelectCityFragment extends Fragment {
         listView.setEmptyView(emptyTextView);
         registerForContextMenu(listView);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "onItemClick");
-                currentPosition = position;
-                showWeatherDetail();
-            }
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            Log.d(TAG, "onItemClick");
+            currentPosition = position;
+            showWeatherDetail();
         });
     }
 
     private void initFloatingBtn() {
         fab = Objects.requireNonNull(getActivity()).findViewById(R.id.fab);
         fab.show();
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addItem();
-            }
-        });
+        fab.setOnClickListener(view -> addItem());
     }
 
     private void getSensors(View view) {
@@ -174,21 +165,9 @@ public class SelectCityFragment extends Fragment {
     private void handleMenuItemClick(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.action_add: {
-                addItem();
-                break;
-            }
-
-            case R.id.action_edit: {
-                editItem(item);
-                break;
-            }
-            case R.id.action_remove: {
-                removeItem(item);
-                break;
-            }
-        }
+        if (id == R.id.action_add) addItem();
+        else if (id == R.id.action_edit) editItem(item);
+        else if (id == R.id.action_remove) removeItem(item);
     }
 
     private void addItem() {
@@ -202,12 +181,7 @@ public class SelectCityFragment extends Fragment {
         final EditText input = new EditText(getContext());
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                adapter.addNewCity(input.getText().toString());
-            }
-        });
+        builder.setPositiveButton("OK", (dialog, which) -> adapter.addNewCity(input.getText().toString()));
         builder.show();
     }
 
@@ -227,12 +201,8 @@ public class SelectCityFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
         builder.setTitle(R.string.edit_city);
         builder.setView(input);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                adapter.editCityName((String)adapter.getItem(finalPosition), input.getText().toString());
-            }
-        });
+        builder.setPositiveButton("OK",
+                (dialog, which) -> adapter.editCityName((String)adapter.getItem(finalPosition), input.getText().toString()));
         builder.show();
     }
 
@@ -356,4 +326,5 @@ public class SelectCityFragment extends Fragment {
             update(currentPressure, event.values[0], percent);
         }
     };
+
 }
