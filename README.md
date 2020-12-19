@@ -15,6 +15,6 @@
 - Отображение картинок Picasso;
 
 ## Скриншоты приложения
-![screenshots](./Weather1.png?raw=true)
-![screenshots](./Weather2.png?raw=true)
-![screenshots](./Weather3.png?raw=true)
+![screenshots](./Weather1.png?raw=true)  
+![screenshots](./Weather2.png?raw=true)  
+![screenshots](./Weather3.png?raw=true)  
