@@ -13,3 +13,8 @@
 - Matherial Design;
 - Запрос данных из сети retrofit, JSON;
 - Отображение картинок Picasso;
+
+## Скриншоты приложения
+![screenshots](./weather1.png?raw=true)
+![screenshots](./weather2.png?raw=true)
+![screenshots](./weather3.png?raw=true)
